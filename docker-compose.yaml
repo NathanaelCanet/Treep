@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # Backend Spring Boot
+  backend:
+    build:
+      context: ./Treep-backend/backend
+      dockerfile: ../Dockerfile
+    container_name: treep-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - treep-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend Angular
+  frontend:
+    build:
+      context: ./Treep-frontend/frontend
+      dockerfile: ../Dockerfile
+    container_name: treep-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - treep-network
+    environment:
+      - API_URL=http://backend:8080
+
+networks:
+  treep-network:
+    driver: bridge
+
+# Optionnel: volumes pour persister des données
+volumes:
+  backend-data:
+    driver: local
