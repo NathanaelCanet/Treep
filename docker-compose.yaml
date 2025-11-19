@@ -4,8 +4,8 @@ services:
   # Backend Spring Boot
   backend:
     build:
-      context: ./Treep-backend/backend
-      dockerfile: ../Dockerfile
+      context: ./backend
+      dockerfile: ./Dockerfile
     container_name: treep-backend
     ports:
       - "8080:8080"
@@ -18,8 +18,8 @@ services:
   # Frontend Angular
   frontend:
     build:
-      context: ./Treep-frontend/frontend
-      dockerfile: ../Dockerfile
+      context: ./frontend
+      dockerfile: ./Dockerfile
     container_name: treep-frontend
     ports:
       - "80:80"
