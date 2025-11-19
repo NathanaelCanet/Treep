@@ -28,7 +28,7 @@ RUN rm /etc/nginx/conf.d/default.conf \
  && printf 'server {\n  listen 80;\n  server_name _;\n  root /usr/share/nginx/html;\n  index index.html;\n  location / {\n    try_files $uri $uri/ /index.html;\n  }\n  gzip on;\n  gzip_types text/plain text/css application/javascript application/json image/svg+xml;\n  add_header Cache-Control "public, max-age=31536000, immutable" always;\n}\n' > /etc/nginx/conf.d/default.conf
 
 # Copy built assets
-COPY --from=build /app/dist/ /usr/share/nginx/html/
+COPY --from=build /app/dist/browser /usr/share/nginx/html/
 
 # Keep nginx in foreground
 CMD ["nginx", "-g", "daemon off;"]
