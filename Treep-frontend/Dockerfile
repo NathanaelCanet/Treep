@@ -2,7 +2,7 @@
 # Place this Dockerfile in the Angular project root (the frontend folder)
 
 # 1) Build stage
-FROM node:18-alpine AS build
+FROM node:20-alpine AS build
 WORKDIR /app
 
 # Optionally set base href at build time: docker build --build-arg APP_BASE=/myapp/ .

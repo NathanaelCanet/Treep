@@ -13,12 +13,7 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     networks:
       - treep-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+    restart: unless-stopped
 
   # Frontend Angular
   frontend:
@@ -29,12 +24,12 @@ services:
     ports:
       - "80:80"
     depends_on:
-      backend:
-        condition: service_healthy
+      - backend
     networks:
       - treep-network
     environment:
       - API_URL=http://backend:8080
+    restart: unless-stopped
 
 networks:
   treep-network:
