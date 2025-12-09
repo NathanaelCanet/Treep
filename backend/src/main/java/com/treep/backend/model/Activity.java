@@ -30,6 +30,58 @@ public class Activity {
     @JsonIgnore
     private Trip trip;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitre() {
+        return titre;
+    }
+
+    public void setTitre(String titre) {
+        this.titre = titre;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Double getCout() {
+        return cout;
+    }
+
+    public void setCout(Double cout) {
+        this.cout = cout;
+    }
+
+    public LocalDateTime getDatePrevue() {
+        return datePrevue;
+    }
+
+    public void setDatePrevue(LocalDateTime datePrevue) {
+        this.datePrevue = datePrevue;
+    }
+
+    public String getStatut() {
+        return statut;
+    }
+
+    public void setStatut(String statut) {
+        this.statut = statut;
+    }
+
+    public Trip getTrip() {
+        return trip;
+    }
+
     public void setTrip(Trip trip) {
         this.trip = trip;
     }
