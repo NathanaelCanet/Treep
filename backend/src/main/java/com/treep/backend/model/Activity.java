@@ -26,7 +26,7 @@ public class Activity {
     private String statut;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "trip_id")
     @JsonIgnore
     private Trip trip;
 
