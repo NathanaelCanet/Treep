@@ -1,41 +1,30 @@
 version: '3.8'
 
 services:
-  # Backend Spring Boot
+  # --- Service Base de Données ---
+  db:
+    image: postgres:15
+    container_name: treep_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: treepdb
+    ports:
+      - "5432:5432" # Expose le port pour que vous puissiez vérifier la DB depuis votre PC
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data # Persistance des données
+
+  # --- Service Backend Spring Boot ---
   backend:
-    build:
-      context: ./backend
-      dockerfile: ./Dockerfile
-    container_name: treep-backend
+    build: ./backend # Docker va chercher le Dockerfile dans ce dossier
+    container_name: treep_backend
     ports:
-      - "8080:8080"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    networks:
-      - treep-network
-    restart: unless-stopped
-
-  # Frontend Angular
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: ./Dockerfile
-    container_name: treep-frontend
-    ports:
-      - "80:80"
+      - "8080:8080" # On expose l'API pour que JavaFX (sur votre PC) puisse lui parler
     depends_on:
-      - backend
-    networks:
-      - treep-network
+      - db # Attend que le conteneur DB soit lancé
     environment:
-      - API_URL=http://backend:8080
-    restart: unless-stopped
-
-networks:
-  treep-network:
-    driver: bridge
-
-# Optionnel: volumes pour persister des données
-volumes:
-  backend-data:
-    driver: local
+      # ATTENTION : Ici, on n'utilise pas 'localhost' mais 'db' (le nom du service ci-dessus)
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/mydb
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
