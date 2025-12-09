@@ -13,6 +13,11 @@ services:
       - "5432:5432" # Expose le port pour que vous puissiez vérifier la DB depuis votre PC
     volumes:
       - ./pgdata:/var/lib/postgresql/data # Persistance des données
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d treepdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   # --- Service Backend Spring Boot ---
   backend:
@@ -21,10 +26,11 @@ services:
     ports:
       - "8080:8080" # On expose l'API pour que JavaFX (sur votre PC) puisse lui parler
     depends_on:
-      - db # Attend que le conteneur DB soit lancé
+      db:
+        condition: service_healthy # Attend que la DB soit vraiment prête
     environment:
       # ATTENTION : Ici, on n'utilise pas 'localhost' mais 'db' (le nom du service ci-dessus)
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/mydb
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/treepdb
       - SPRING_DATASOURCE_USERNAME=user
       - SPRING_DATASOURCE_PASSWORD=password
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update

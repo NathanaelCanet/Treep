@@ -13,7 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class Activite {
+public class Activity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,11 +26,11 @@ public class Activite {
     private String statut;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "voyage_id")
+    @JoinColumn(name = "id")
     @JsonIgnore
-    private Voyage voyage;
+    private Trip trip;
 
-    public void setVoyage(Voyage voyage) {
-        this.voyage = voyage;
+    public void setTrip(Trip trip) {
+        this.trip = trip;
     }
 }
