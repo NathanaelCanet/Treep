@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.treep.frontend.ui.DashboardController">
+
+    <top>
+        <VBox alignment="CENTER" style="-fx-background-color: #2c3e50;" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="TREEP MANAGER" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                    <padding>
+                        <Insets bottom="15.0" top="15.0" />
+                    </padding>
+                </Label>
+            </children>
+        </VBox>
+    </top>
+
+    <left>
+        <VBox prefWidth="350.0" spacing="10.0" style="-fx-background-color: #ecf0f1;" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="Voyages enregistrés">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <ListView fx:id="tripList" VBox.vgrow="ALWAYS" style="-fx-font-family: 'Segoe UI'; -fx-font-size: 13;" />
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onRefresh" text="Rafraîchir la liste" />
+            </children>
+            <padding>
+                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+            </padding>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="15.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="Nouveau Voyage" textFill="#2c3e50">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets bottom="10.0" />
+                    </VBox.margin>
+                </Label>
+
+                <Separator prefWidth="200.0" />
+
+                <VBox alignment="CENTER_LEFT" spacing="5.0" maxWidth="400.0">
+                    <Label text="Destination" style="-fx-font-weight: bold;"/>
+                    <TextField fx:id="destInput" promptText="Ex: Tokyo, Paris..." style="-fx-padding: 10;" />
+                </VBox>
+
+                <VBox alignment="CENTER_LEFT" spacing="5.0" maxWidth="400.0">
+                    <Label text="Prix (€)" style="-fx-font-weight: bold;"/>
+                    <TextField fx:id="priceInput" promptText="Ex: 1250.00" style="-fx-padding: 10;" />
+                </VBox>
+
+                <VBox alignment="CENTER_LEFT" spacing="5.0" maxWidth="400.0">
+                    <Label text="Date de départ" style="-fx-font-weight: bold;"/>
+                    <DatePicker fx:id="dateInput" maxWidth="1.7976931348623157E308" style="-fx-padding: 5;" />
+                </VBox>
+
+                <VBox alignment="CENTER_LEFT" spacing="5.0" maxWidth="400.0">
+                    <Label text="Activités incluses (séparées par une virgule)" style="-fx-font-weight: bold;"/>
+                    <TextField fx:id="activitiesInput" promptText="Ex: Visite musée, Randonnée, Piscine..." style="-fx-padding: 10;" />
+                    <Label text="* Séparez les activités par une virgule" textFill="#7f8c8d">
+                        <font><Font size="10.0" /></font>
+                    </Label>
+                </VBox>
+
+                <Button mnemonicParsing="false" onAction="#onSubmit" prefHeight="45.0" prefWidth="400.0" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;" text="ENREGISTRER LE VOYAGE">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets top="20.0" />
+                    </VBox.margin>
+                </Button>
+
+            </children>
+            <padding>
+                <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+            </padding>
+        </VBox>
+    </center>
+</BorderPane>
