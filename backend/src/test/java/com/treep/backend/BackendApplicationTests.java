@@ -1,4 +1,4 @@
-package com.Treep.backend;
+package com.treep.backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
