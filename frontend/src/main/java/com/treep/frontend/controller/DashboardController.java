@@ -1,8 +1,9 @@
-package com.treep.frontend.ui;
+package com.treep.frontend.controller;
 
-import com.treep.frontend.api.ApiClient;
+import com.treep.frontend.service.ApiClientServices;
 import com.treep.frontend.model.Activity;
 import com.treep.frontend.model.Trip;
+import com.treep.frontend.service.ApiClientServices;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.util.ArrayList;
@@ -10,18 +11,16 @@ import java.util.List;
 
 public class DashboardController {
 
-    // INFO: Liens avec le fichier FXML
     @FXML private ListView<String> tripList;
     @FXML private TextField destInput;
     @FXML private TextField priceInput;
     @FXML private DatePicker dateInput;
-    @FXML private TextField activitiesInput; // Ex: "Plongée, Tennis"
+    @FXML private TextField activitiesInput;
 
-    private final ApiClient api = new ApiClient();
+    private final ApiClientServices api = new ApiClientServices();
 
     @FXML
     public void initialize() {
-        // INFO: Chargement des données au démarrage
         refreshData();
     }
 
@@ -36,17 +35,28 @@ public class DashboardController {
             List<Activity> activityList = new ArrayList<>();
             if (activitiesInput.getText() != null && !activitiesInput.getText().isBlank()) {
                 String[] rawActivities = activitiesInput.getText().split(",");
-                for (String act : rawActivities) {
-                    // DEBUG: On met un prix par défaut de 0 pour l'activité pour l'instant
-                    activityList.add(new Activity(act.trim(), 0.0));
+                for (String actTitle : rawActivities) {
+                    Activity act = new Activity(
+                            actTitle.trim(),
+                            "Description par défaut",
+                            0.0,
+                            "2025-01-01",
+                            "To Do"
+                    );
+                    activityList.add(act);
                 }
             }
 
+            String dateDebut = (dateInput.getValue() != null) ? dateInput.getValue().toString() : "2025-01-01";
+            String dateFin = dateDebut; // TODO: Ajouter un champ date fin plus tard
+            Double budget = Double.parseDouble(priceInput.getText());
+
             Trip newTrip = new Trip(
-                    null, // L'ID sera généré par le backend
+                    null,
                     destInput.getText(),
-                    Double.parseDouble(priceInput.getText()),
-                    (dateInput.getValue() != null) ? dateInput.getValue().toString() : "N/A",
+                    dateDebut,
+                    dateFin,
+                    budget,
                     activityList
             );
 
@@ -58,29 +68,20 @@ public class DashboardController {
             }
 
         } catch (NumberFormatException e) {
-            showAlert("Erreur de Saisie", "Le prix doit être un chiffre (utilisez le point .)");
+            showAlert("Erreur de Saisie", "Le budget doit être un chiffre (utilisez le point .)");
         } catch (Exception e) {
+            e.printStackTrace();
             showAlert("Erreur", e.getMessage());
         }
     }
 
     private void refreshData() {
         tripList.getItems().clear();
-        // INFO: Appel API asynchrone simulé
         List<Trip> trips = api.getAllTrips();
 
         for (Trip t : trips) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(t.getDestination()).append(" (").append(t.getPrice()).append("€)");
-
-            // Affichage propre des activités
-            if (!t.getActivities().isEmpty()) {
-                sb.append("\n  ↳ Activités: ");
-                t.getActivities().forEach(a -> sb.append(a.getName()).append(", "));
-                // Retire la dernière virgule
-                sb.setLength(sb.length() - 2);
-            }
-            tripList.getItems().add(sb.toString());
+            String label = t.getDestination() + " (" + t.getBudgetTotal() + " €)";
+            tripList.getItems().add(label);
         }
     }
 
