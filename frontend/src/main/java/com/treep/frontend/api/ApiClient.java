@@ -2,6 +2,7 @@ package com.treep.frontend.api;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.treep.frontend.model.Activity;
 import com.treep.frontend.model.Trip;
 
 import java.net.URI;
@@ -39,6 +40,28 @@ public class ApiClient {
             }
         } catch (Exception e) {
             System.err.println("DEBUG: Impossible de joindre le backend -> " + e.getMessage());
+        }
+        return Collections.emptyList();
+    }
+
+    // INFO: GET - Récupérer les activités d'un voyage donne
+    public List<Activity> getActivitiesForTrip(String tripId) {
+        try {
+            // Construit l'URL complète avec l'ID du voyage (tripId)
+            String url = "http://localhost:8080/api/activities/trip/" + tripId;
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                return mapper.readValue(response.body(), new TypeReference<List<Activity>>(){});
+            }
+        } catch (Exception e) {
+            System.err.println("DEBUG: Impossible de joindre le backend pour les activités -> " + e.getMessage());
         }
         return Collections.emptyList();
     }

@@ -12,17 +12,25 @@ public class DashboardController {
 
     // INFO: Liens avec le fichier FXML
     @FXML private ListView<String> tripList;
+    @FXML private ListView<String> activityDisplayList;
     @FXML private TextField destInput;
     @FXML private TextField priceInput;
     @FXML private DatePicker dateInput;
     @FXML private TextField activitiesInput; // Ex: "Plongée, Tennis"
 
     private final ApiClient api = new ApiClient();
+    private List<Trip> currentTrips = new ArrayList<>();
 
     @FXML
     public void initialize() {
         // INFO: Chargement des données au démarrage
         refreshData();
+
+        // INFO: Ajout d'un listener pour charger les activités quand on sélectionne un voyage
+        tripList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            int selectedIndex = tripList.getSelectionModel().getSelectedIndex();
+            onTripSelected(selectedIndex);
+        });
     }
 
     @FXML
@@ -65,10 +73,11 @@ public class DashboardController {
     }
 
     private void refreshData() {
+        activityDisplayList.getItems().clear();
         tripList.getItems().clear();
         // INFO: Appel API asynchrone simulé
-        List<Trip> trips = api.getAllTrips();
-
+        currentTrips = api.getAllTrips();
+        List<Trip> trips = currentTrips;
         for (Trip t : trips) {
             StringBuilder sb = new StringBuilder();
             sb.append(t.getDestination()).append(" (").append(t.getPrice()).append("€)");
@@ -82,6 +91,21 @@ public class DashboardController {
             }
             tripList.getItems().add(sb.toString());
         }
+    }
+
+    private void onTripSelected(int index) {
+        if (index < 0 || index >= currentTrips.size()) {
+            return;
+        }
+
+        Trip selectedTrip = currentTrips.get(index);
+        activityDisplayList.getItems().clear();
+        activityDisplayList.getItems().add("Chargement des activités...");
+
+        // INFO: On utilise la nouvelle méthode de l'API
+        List<Activity> activities = api.getActivitiesForTrip(selectedTrip.getId().toString());
+        activityDisplayList.getItems().clear();
+        activities.forEach(activity -> activityDisplayList.getItems().add(activity.getName() + " (" + activity.getPrice() + "€)"));
     }
 
     private void clearForm() {
