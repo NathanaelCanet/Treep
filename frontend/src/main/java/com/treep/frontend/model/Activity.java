@@ -1,28 +1,42 @@
 package com.treep.frontend.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Activity {
-    private String name;
-    private double price;
+    private Long id;
+    private String titre;
+    private String description;
 
-    public Activity(String name, double price) {
-        this.name = name;
-        this.price = price;
+    @JsonProperty("cout")
+    private Double cout;
+
+    @JsonProperty("date_prevue")
+    private String datePrevue;
+
+    private String statut;
+
+    public Activity() {}
+
+    public Activity(String titre, String description, Double cout, String datePrevue, String statut) {
+        this.titre = titre;
+        this.description = description;
+        this.cout = cout;
+        this.datePrevue = datePrevue;
+        this.statut = statut;
     }
 
-    // Getters et Setters
-    public String getName() {
-        return name;
-    }
+    public String getTitre() { return titre; }
+    public void setTitre(String titre) { this.titre = titre; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public double getPrice() {
-        return price;
-    }
+    public Double getCout() { return cout; }
+    public void setCout(Double cout) { this.cout = cout; }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+    public String getDatePrevue() { return datePrevue; }
+    public void setDatePrevue(String datePrevue) { this.datePrevue = datePrevue; }
+
+    public String getStatut() { return statut; }
+    public void setStatut(String statut) { this.statut = statut; }
 }

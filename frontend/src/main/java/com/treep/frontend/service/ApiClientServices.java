@@ -1,4 +1,4 @@
-package com.treep.frontend.api;
+package com.treep.frontend.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,20 +12,16 @@ import java.net.http.HttpResponse;
 import java.util.Collections;
 import java.util.List;
 
-public class ApiClient {
-
-    // TODO: Port backend Docker
+public class ApiClientServices {
     private static final String BASE_URL = "http://localhost:8080/api/trips";
-
     private final HttpClient client;
     private final ObjectMapper mapper;
 
-    public ApiClient() {
+    public ApiClientServices() {
         this.client = HttpClient.newHttpClient();
         this.mapper = new ObjectMapper();
     }
 
-    // INFO: GET - Récupérer tous les voyages
     public List<Trip> getAllTrips() {
         try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -39,7 +35,7 @@ public class ApiClient {
                 return mapper.readValue(response.body(), new TypeReference<List<Trip>>(){});
             }
         } catch (Exception e) {
-            System.err.println("DEBUG: Impossible de joindre le backend -> " + e.getMessage());
+            System.err.println("DEBUG: Erreur GET -> " + e.getMessage());
         }
         return Collections.emptyList();
     }
@@ -70,7 +66,6 @@ public class ApiClient {
     public boolean addTrip(Trip trip) {
         try {
             String json = mapper.writeValueAsString(trip);
-
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(BASE_URL))
                     .header("Content-Type", "application/json")

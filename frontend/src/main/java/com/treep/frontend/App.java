@@ -5,15 +5,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class App extends Application {
+import java.util.Objects;
 
+public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        // INFO: Charge le fichier FXML depuis les ressources
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/dashboard.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 900, 600);
+        // Chargement du FXML Hub
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/hub-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1000, 700);
 
-        stage.setTitle("Treep - Gestion de Voyages");
+        String css = Objects.requireNonNull(getClass().getResource("/css/hub.css")).toExternalForm();
+        scene.getStylesheets().add(css);
+
+        stage.setTitle("Treep - Hub");
         stage.setScene(scene);
         stage.show();
     }
