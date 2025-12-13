@@ -12,16 +12,24 @@ import java.util.List;
 public class DashboardController {
 
     @FXML private ListView<String> tripList;
+    @FXML private ListView<String> activityDisplayList;
     @FXML private TextField destInput;
     @FXML private TextField priceInput;
     @FXML private DatePicker dateInput;
     @FXML private TextField activitiesInput;
 
-    private final ApiClientServices api = new ApiClientServices();
+    private final ApiClient api = new ApiClient();
+    private List<Trip> currentTrips = new ArrayList<>();
 
     @FXML
     public void initialize() {
         refreshData();
+
+        // INFO: Ajout d'un listener pour charger les activités quand on sélectionne un voyage
+        tripList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            int selectedIndex = tripList.getSelectionModel().getSelectedIndex();
+            onTripSelected(selectedIndex);
+        });
     }
 
     @FXML
@@ -76,6 +84,7 @@ public class DashboardController {
     }
 
     private void refreshData() {
+        activityDisplayList.getItems().clear();
         tripList.getItems().clear();
         List<Trip> trips = api.getAllTrips();
 
@@ -83,6 +92,21 @@ public class DashboardController {
             String label = t.getDestination() + " (" + t.getBudgetTotal() + " €)";
             tripList.getItems().add(label);
         }
+    }
+
+    private void onTripSelected(int index) {
+        if (index < 0 || index >= currentTrips.size()) {
+            return;
+        }
+
+        Trip selectedTrip = currentTrips.get(index);
+        activityDisplayList.getItems().clear();
+        activityDisplayList.getItems().add("Chargement des activités...");
+
+        // INFO: On utilise la nouvelle méthode de l'API
+        List<Activity> activities = api.getActivitiesForTrip(selectedTrip.getId().toString());
+        activityDisplayList.getItems().clear();
+        activities.forEach(activity -> activityDisplayList.getItems().add(activity.getName() + " (" + activity.getPrice() + "€)"));
     }
 
     private void clearForm() {
