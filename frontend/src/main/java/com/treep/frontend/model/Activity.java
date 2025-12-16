@@ -1,8 +1,13 @@
 package com.treep.frontend.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data //Setters et Getters
+@NoArgsConstructor // Constructeur sans argument
+@AllArgsConstructor // Constructeur avec argument
 public class Activity {
     private Long id;
     private String titre;
@@ -10,32 +15,4 @@ public class Activity {
     private Double cout;
     private String datePrevue;
     private String statut;
-
-    public Activity() {}
-
-    public Activity(String titre, String description, Double cout, String datePrevue, String statut) {
-        this.titre = titre;
-        this.description = description;
-        this.cout = cout;
-        this.datePrevue = datePrevue;
-        this.statut = statut;
-    }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getTitre() { return titre; }
-    public void setTitre(String titre) { this.titre = titre; }
-
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-
-    public Double getCout() { return cout; }
-    public void setCout(Double cout) { this.cout = cout; }
-
-    public String getDatePrevue() { return datePrevue; }
-    public void setDatePrevue(String datePrevue) { this.datePrevue = datePrevue; }
-
-    public String getStatut() { return statut; }
-    public void setStatut(String statut) { this.statut = statut; }
 }
