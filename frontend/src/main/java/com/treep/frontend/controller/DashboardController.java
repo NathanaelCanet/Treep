@@ -1,6 +1,5 @@
 package com.treep.frontend.controller;
 
-import com.treep.frontend.service.ApiClientServices;
 import com.treep.frontend.model.Activity;
 import com.treep.frontend.model.Trip;
 import com.treep.frontend.service.ApiClientServices;
@@ -18,14 +17,14 @@ public class DashboardController {
     @FXML private DatePicker dateInput;
     @FXML private TextField activitiesInput;
 
-    private final ApiClient api = new ApiClient();
+    private final ApiClientServices api = new ApiClientServices();
     private List<Trip> currentTrips = new ArrayList<>();
 
     @FXML
     public void initialize() {
         refreshData();
 
-        // INFO: Ajout d'un listener pour charger les activités quand on sélectionne un voyage
+        // Listener pour charger les activités quand on sélectionne un voyage
         tripList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             int selectedIndex = tripList.getSelectionModel().getSelectedIndex();
             onTripSelected(selectedIndex);
@@ -86,9 +85,9 @@ public class DashboardController {
     private void refreshData() {
         activityDisplayList.getItems().clear();
         tripList.getItems().clear();
-        List<Trip> trips = api.getAllTrips();
+        currentTrips = api.getAllTrips();
 
-        for (Trip t : trips) {
+        for (Trip t : currentTrips) {
             String label = t.getDestination() + " (" + t.getBudgetTotal() + " €)";
             tripList.getItems().add(label);
         }
@@ -103,10 +102,10 @@ public class DashboardController {
         activityDisplayList.getItems().clear();
         activityDisplayList.getItems().add("Chargement des activités...");
 
-        // INFO: On utilise la nouvelle méthode de l'API
+        // Récupérer les activités du voyage sélectionné
         List<Activity> activities = api.getActivitiesForTrip(selectedTrip.getId().toString());
         activityDisplayList.getItems().clear();
-        activities.forEach(activity -> activityDisplayList.getItems().add(activity.getName() + " (" + activity.getPrice() + "€)"));
+        activities.forEach(activity -> activityDisplayList.getItems().add(activity.getTitre() + " (" + activity.getCout() + "€)"));
     }
 
     private void clearForm() {

@@ -40,11 +40,11 @@ public class ApiClientServices {
         return Collections.emptyList();
     }
 
-    // INFO: GET - Récupérer les activités d'un voyage donne
+    // GET - Récupérer les activités d'un voyage donné
     public List<Activity> getActivitiesForTrip(String tripId) {
         try {
-            // Construit l'URL complète avec l'ID du voyage (tripId)
             String url = "http://localhost:8080/api/activities/trip/" + tripId;
+            System.out.println("DEBUG: GET activities for trip " + tripId);
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
@@ -52,17 +52,17 @@ public class ApiClientServices {
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("DEBUG: Activities response status = " + response.statusCode());
 
             if (response.statusCode() == 200) {
                 return mapper.readValue(response.body(), new TypeReference<List<Activity>>(){});
             }
         } catch (Exception e) {
-            System.err.println("DEBUG: Impossible de joindre le backend pour les activités -> " + e.getMessage());
+            System.err.println("DEBUG: Erreur GET activities -> " + e.getMessage());
         }
         return Collections.emptyList();
     }
 
-    // INFO: POST - Créer un nouveau voyage
     public boolean addTrip(Trip trip) {
         try {
             String json = mapper.writeValueAsString(trip);
