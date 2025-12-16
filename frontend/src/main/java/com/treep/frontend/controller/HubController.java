@@ -7,6 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -18,11 +20,22 @@ public class HubController {
 
     @FXML private VBox mainContainer;
     @FXML private TextField searchField;
+    @FXML private ToggleButton allTripsBtn;
+    @FXML private ToggleButton myTripsBtn;
 
     private final ApiClientServices api = ApiClientServices.getInstance();
 
     @FXML
     public void initialize() {
+        // Toggle group for tabs
+        ToggleGroup group = new ToggleGroup();
+        allTripsBtn.setToggleGroup(group);
+        myTripsBtn.setToggleGroup(group);
+        allTripsBtn.setSelected(true);
+
+        allTripsBtn.setOnAction(e -> refreshHub());
+        myTripsBtn.setOnAction(e -> refreshHub());
+
         refreshHub();
     }
 
@@ -85,7 +98,17 @@ public class HubController {
 
     private void refreshHub() {
         mainContainer.getChildren().clear();
-        List<Trip> trips = api.getAllTrips();
+        List<Trip> trips;
+        if (myTripsBtn.isSelected()) {
+            var user = com.treep.frontend.service.AuthService.getCurrentUser();
+            if (user == null || user.getId() == null) {
+                trips = List.of();
+            } else {
+                trips = api.getTripsForUser(user.getId());
+            }
+        } else {
+            trips = api.getAllTrips();
+        }
 
         for (Trip trip : trips) {
             try {
