@@ -10,7 +10,7 @@ public class Activity {
     @JsonProperty("cout")
     private Double cout;
 
-    @JsonProperty("datePrevue")
+    @JsonProperty("date_prevue")
     private String datePrevue;
 
     private String statut;
@@ -24,9 +24,6 @@ public class Activity {
         this.datePrevue = datePrevue;
         this.statut = statut;
     }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
     public String getTitre() { return titre; }
     public void setTitre(String titre) { this.titre = titre; }
