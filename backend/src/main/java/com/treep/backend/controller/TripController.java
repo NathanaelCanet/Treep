@@ -26,14 +26,21 @@ public class TripController {
     private final UserRepository userRepo;
 
     @GetMapping
-    public List<Trip> getAllTrips() {
+    public List<Trip> getAllTrips(@RequestParam(required = false) Long excludeUserId) {
         // Retourne uniquement les voyages publics (non privés ou NULL)
+        if (excludeUserId != null) {
+            // Exclure les voyages de l'utilisateur
+            return tripRepo.findByUser_IdNotAndIsPrivateFalseOrUser_IdNotAndIsPrivateIsNull(excludeUserId, excludeUserId);
+        }
         return tripRepo.findByIsPrivateFalseOrIsPrivateIsNull();
     }
 
     @GetMapping("/search")
-    public List<Trip> searchTrips(@RequestParam String destination) {
+    public List<Trip> searchTrips(@RequestParam String destination, @RequestParam(required = false) Long excludeUserId) {
         // Recherche uniquement parmi les voyages publics
+        if (excludeUserId != null) {
+            return tripRepo.findByUser_IdNotAndIsPrivateFalseAndDestinationContainingIgnoreCaseOrUser_IdNotAndIsPrivateIsNullAndDestinationContainingIgnoreCase(excludeUserId, destination, excludeUserId, destination);
+        }
         return tripRepo.findByIsPrivateFalseOrIsPrivateIsNullAndDestinationContainingIgnoreCase(destination);
     }
 
