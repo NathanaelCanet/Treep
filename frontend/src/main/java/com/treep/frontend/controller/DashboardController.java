@@ -3,6 +3,7 @@ package com.treep.frontend.controller;
 import com.treep.frontend.model.Activity;
 import com.treep.frontend.model.Trip;
 import com.treep.frontend.service.ApiClientServices;
+import com.treep.frontend.service.AuthService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -69,14 +70,15 @@ public class DashboardController {
             String dateFin = dateDebut;
             Double budget = Double.parseDouble(priceInput.getText());
 
-            Trip newTrip = new Trip(
+                Trip newTrip = new Trip(
                     null,
                     destInput.getText(),
                     dateDebut,
                     dateFin,
                     budget,
-                    activityList
-            );
+                    activityList,
+                    AuthService.getCurrentUser() // Associe l'utilisateur courant
+                );
 
             if (api.addTrip(newTrip)) {
                 Stage stage = (Stage) destInput.getScene().getWindow();
