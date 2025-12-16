@@ -28,6 +28,12 @@ public class TripController {
 
     @PostMapping
     public Trip createTrip(@RequestBody Trip trip) {
+        // Lier chaque activité au trip 
+        if (trip.getActivities() != null) {
+            for (var activity : trip.getActivities()) {
+                activity.setTrip(trip);
+            }
+        }
         return tripRepo.save(trip);
     }
 
