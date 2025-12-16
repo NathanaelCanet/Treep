@@ -34,8 +34,14 @@ public class ApiClientServices {
 
     public List<Trip> getAllTrips() {
         try {
+            // Exclure les voyages de l'utilisateur courant
+            String url = BASE_URL;
+            if (AuthService.getCurrentUser() != null && AuthService.getCurrentUser().getId() != null) {
+                url += "?excludeUserId=" + AuthService.getCurrentUser().getId();
+            }
+            
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(BASE_URL))
+                    .uri(URI.create(url))
                     .GET()
                     .build();
 
@@ -75,6 +81,10 @@ public class ApiClientServices {
     public List<Trip> searchTrips(String destination) {
         try {
             String url = BASE_URL + "/search?destination=" + java.net.URLEncoder.encode(destination, "UTF-8");
+            // Exclure les voyages de l'utilisateur courant
+            if (AuthService.getCurrentUser() != null && AuthService.getCurrentUser().getId() != null) {
+                url += "&excludeUserId=" + AuthService.getCurrentUser().getId();
+            }
             System.out.println("DEBUG: Searching trips with destination: " + destination);
 
             HttpRequest request = HttpRequest.newBuilder()
