@@ -45,6 +45,7 @@ public class DashboardController {
                 String[] rawActivities = activitiesInput.getText().split(",");
                 for (String actTitle : rawActivities) {
                     Activity act = new Activity(
+                            null,
                             actTitle.trim(),
                             "Description par défaut",
                             0.0,
