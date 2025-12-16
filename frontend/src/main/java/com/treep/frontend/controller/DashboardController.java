@@ -40,6 +40,7 @@ public class DashboardController {
     public void onSubmit() {
         try {
             List<Activity> activityList = new ArrayList<>();
+            String dateDebut = (dateInput.getValue() != null) ? dateInput.getValue().toString() : "2025-01-01";
             if (activitiesInput.getText() != null && !activitiesInput.getText().isBlank()) {
                 String[] rawActivities = activitiesInput.getText().split(",");
                 for (String actTitle : rawActivities) {
@@ -47,14 +48,14 @@ public class DashboardController {
                             actTitle.trim(),
                             "Description par défaut",
                             0.0,
-                            "2025-01-01",
+                            dateDebut + "T10:00:00", //format LocalDateTime requis pour le backend
                             "To Do"
                     );
                     activityList.add(act);
                 }
             }
 
-            String dateDebut = (dateInput.getValue() != null) ? dateInput.getValue().toString() : "2025-01-01";
+            
             String dateFin = dateDebut; // TODO: Ajouter un champ date fin plus tard
             Double budget = Double.parseDouble(priceInput.getText());
 

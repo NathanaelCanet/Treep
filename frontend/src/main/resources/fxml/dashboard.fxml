@@ -22,6 +22,10 @@
 
             <ListView fx:id="tripList" VBox.vgrow="ALWAYS" styleClass="dark-list"/>
 
+            <Label text="Activités du voyage" styleClass="subtitle-label"/>
+
+            <ListView fx:id="activityDisplayList" VBox.vgrow="ALWAYS" styleClass="dark-list"/>
+
             <Button text="Actualiser" onAction="#onRefresh" maxWidth="Infinity" styleClass="button, btn-secondary"/>
         </VBox>
     </left>
