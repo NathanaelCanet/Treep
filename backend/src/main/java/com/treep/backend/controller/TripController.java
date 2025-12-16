@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.treep.backend.model.Trip;
@@ -24,6 +25,11 @@ public class TripController {
     @GetMapping
     public List<Trip> getAllTrips() {
         return tripRepo.findAll();
+    }
+
+    @GetMapping("/search")
+    public List<Trip> searchTrips(@RequestParam String destination) {
+        return tripRepo.findByDestinationContainingIgnoreCase(destination);
     }
 
     @PostMapping
