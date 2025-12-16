@@ -14,8 +14,8 @@ public class App extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/hub-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1000, 700);
 
-        String css = Objects.requireNonNull(getClass().getResource("/css/hub.css")).toExternalForm();
-        scene.getStylesheets().add(css);
+        // Ajouter BootstrapFX
+        scene.getStylesheets().add(org.kordamp.bootstrapfx.BootstrapFX.bootstrapFXStylesheet());
 
         stage.setTitle("Treep - Hub");
         stage.setScene(scene);
