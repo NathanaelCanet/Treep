@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.treep.backend.model.User;
 import com.treep.backend.repository.UserRepository;
+import com.treep.backend.service.PasswordService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
     private final UserRepository userRepo;
+    private final PasswordService passwordService;
 
     @GetMapping
     public List<User> getAllUsers() {
@@ -47,6 +49,8 @@ public class UserController {
         if (userRepo.existsByLogin(user.getLogin())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Login déjà utilisé");
         }
+        // Hache le mot de passe avant de sauvegarder
+        user.setPassword(passwordService.hashPassword(user.getPassword()));
         return userRepo.save(user);
     }
 
@@ -54,8 +58,9 @@ public class UserController {
     public User login(@RequestBody User loginRequest) {
         User user = userRepo.findByLogin(loginRequest.getLogin())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login incorrect"));
-        
-        if (!user.getPassword().equals(loginRequest.getPassword())) {
+
+        // Vérifie le mot de passe avec BCrypt
+        if (!passwordService.verifyPassword(loginRequest.getPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Mot de passe incorrect");
         }
         return user;
@@ -66,16 +71,17 @@ public class UserController {
         // Cherche l'utilisateur par son ID, lève une erreur 404 s'il n'existe pas
         User user = userRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User introuvable"));
-        
+
         user.setLogin(userDetails.getLogin());
-        
+
         // Met à jour le mot de passe seulement s'il est fourni (pas null et pas vide)
         if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
-            user.setPassword(userDetails.getPassword());
+            // Hache le nouveau mot de passe avant de le sauvegarder
+            user.setPassword(passwordService.hashPassword(userDetails.getPassword()));
         }
-        
+
         user.setRole(userDetails.getRole());
-        
+
         return userRepo.save(user);
     }
 
