@@ -28,6 +28,7 @@ public class Trip {
     private LocalDate dateDebut;
     private LocalDate dateFin;
     private Double budgetTotal;
+    private Boolean isPrivate = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -97,5 +98,13 @@ public class Trip {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Boolean getIsPrivate() {
+        return isPrivate;
+    }
+
+    public void setIsPrivate(Boolean isPrivate) {
+        this.isPrivate = isPrivate;
     }
 }

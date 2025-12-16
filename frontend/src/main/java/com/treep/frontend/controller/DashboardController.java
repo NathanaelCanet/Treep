@@ -21,6 +21,7 @@ public class DashboardController {
     @FXML private DatePicker dateFinInput;
     @FXML private TextField activityInput;
     @FXML private ListView<String> activityListView;
+    @FXML private CheckBox privateCheckBox;
 
     private final ApiClientServices api = ApiClientServices.getInstance();
     private final ObservableList<String> activities = FXCollections.observableArrayList();
@@ -84,7 +85,8 @@ public class DashboardController {
                     dateFin,
                     budget,
                     activityList,
-                    AuthService.getCurrentUser() // Associe l'utilisateur courant
+                    AuthService.getCurrentUser(), // Associe l'utilisateur courant
+                    privateCheckBox.isSelected() // Définit si le voyage est privé
                 );
 
             if (api.addTrip(newTrip)) {

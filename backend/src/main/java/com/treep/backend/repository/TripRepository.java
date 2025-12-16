@@ -15,4 +15,10 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
 
     // Recherche par propriétaire (user id)
     List<Trip> findByUser_Id(Long userId);
+
+    // Récupérer les voyages publics (isPrivate = false OU isPrivate = null)
+    List<Trip> findByIsPrivateFalseOrIsPrivateIsNull();
+
+    // Recherche par destination parmi les voyages publics
+    List<Trip> findByIsPrivateFalseOrIsPrivateIsNullAndDestinationContainingIgnoreCase(String destination);
 }
