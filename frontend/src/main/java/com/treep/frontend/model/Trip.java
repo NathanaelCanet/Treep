@@ -1,22 +1,16 @@
 package com.treep.frontend.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Trip {
     private Long id;
     private String destination;
-
-    @JsonProperty("date_debut")
     private String dateDebut;
-
-    @JsonProperty("date_fin")
     private String dateFin;
-
-    @JsonProperty("budget_total")
     private Double budgetTotal;
-
     private List<Activity> activities = new ArrayList<>();
 
     public Trip() {}
