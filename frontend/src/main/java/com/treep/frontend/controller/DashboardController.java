@@ -18,7 +18,7 @@ public class DashboardController {
     @FXML private DatePicker dateInput;
     @FXML private TextField activitiesInput;
 
-    private final ApiClient api = new ApiClient();
+    private final ApiClientServices api = new ApiClientServices();
     private List<Trip> currentTrips = new ArrayList<>();
 
     @FXML
@@ -88,9 +88,9 @@ public class DashboardController {
     private void refreshData() {
         activityDisplayList.getItems().clear();
         tripList.getItems().clear();
-        List<Trip> trips = api.getAllTrips();
+        currentTrips = api.getAllTrips();
 
-        for (Trip t : trips) {
+        for (Trip t : currentTrips) {
             String label = t.getDestination() + " (" + t.getBudgetTotal() + " €)";
             tripList.getItems().add(label);
         }
@@ -108,7 +108,7 @@ public class DashboardController {
         // INFO: On utilise la nouvelle méthode de l'API
         List<Activity> activities = api.getActivitiesForTrip(selectedTrip.getId().toString());
         activityDisplayList.getItems().clear();
-        activities.forEach(activity -> activityDisplayList.getItems().add(activity.getName() + " (" + activity.getPrice() + "€)"));
+        activities.forEach(activity -> activityDisplayList.getItems().add(activity.getTitre() + " (" + activity.getCout() + "€)"));
     }
 
     private void clearForm() {
