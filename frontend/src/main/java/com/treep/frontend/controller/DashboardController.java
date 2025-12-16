@@ -15,13 +15,20 @@ import java.util.List;
 
 public class DashboardController {
 
-    @FXML private TextField destInput;
-    @FXML private TextField priceInput;
-    @FXML private DatePicker dateInput;
-    @FXML private DatePicker dateFinInput;
-    @FXML private TextField activityInput;
-    @FXML private ListView<String> activityListView;
-    @FXML private CheckBox privateCheckBox;
+    @FXML
+    private TextField destInput;
+    @FXML
+    private TextField priceInput;
+    @FXML
+    private DatePicker dateInput;
+    @FXML
+    private DatePicker dateFinInput;
+    @FXML
+    private TextField activityInput;
+    @FXML
+    private ListView<String> activityListView;
+    @FXML
+    private CheckBox privateCheckBox;
 
     private final ApiClientServices api = ApiClientServices.getInstance();
     private final ObservableList<String> activities = FXCollections.observableArrayList();
@@ -29,7 +36,7 @@ public class DashboardController {
     @FXML
     public void initialize() {
         activityListView.setItems(activities);
-        
+
         // Double-clic pour supprimer une activité
         activityListView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
@@ -56,13 +63,14 @@ public class DashboardController {
         try {
             String dateDebut = (dateInput.getValue() != null) ? dateInput.getValue().toString() : "2025-01-01";
             String dateFin = (dateFinInput.getValue() != null) ? dateFinInput.getValue().toString() : dateDebut;
-            
+
             // Vérifier que la date de fin n'est pas avant la date de début
-            if (dateInput.getValue() != null && dateFinInput.getValue() != null && dateFinInput.getValue().isBefore(dateInput.getValue())) {
+            if (dateInput.getValue() != null && dateFinInput.getValue() != null
+                    && dateFinInput.getValue().isBefore(dateInput.getValue())) {
                 showAlert("Erreur", "La date de fin ne peut pas être avant la date de début.");
                 return;
             }
-            
+
             List<Activity> activityList = new ArrayList<>();
             for (String actName : activities) {
                 Activity act = new Activity(
@@ -71,14 +79,13 @@ public class DashboardController {
                         "Description par défaut",
                         0.0,
                         dateDebut + "T10:00:00",
-                        "To Do"
-                );
+                        "To Do");
                 activityList.add(act);
             }
 
             Double budget = Double.parseDouble(priceInput.getText());
 
-                Trip newTrip = new Trip(
+            Trip newTrip = new Trip(
                     null,
                     destInput.getText(),
                     dateDebut,
@@ -86,8 +93,9 @@ public class DashboardController {
                     budget,
                     activityList,
                     AuthService.getCurrentUser(), // Associe l'utilisateur courant
-                    privateCheckBox.isSelected() // Définit si le voyage est privé
-                );
+                    privateCheckBox.isSelected(), // Définit si le voyage est privé
+                    false // isFavorite - par défaut false pour un nouveau voyage
+            );
 
             if (api.addTrip(newTrip)) {
                 Stage stage = (Stage) destInput.getScene().getWindow();

@@ -14,10 +14,10 @@ import java.util.List;
 
 public class ApiClientServices {
     private static final String BASE_URL = "http://localhost:8080/api/trips";
-    
+
     // Singleton instance
     private static final ApiClientServices INSTANCE = new ApiClientServices();
-    
+
     private final HttpClient client;
     private final ObjectMapper mapper;
 
@@ -26,7 +26,7 @@ public class ApiClientServices {
         this.client = HttpClient.newHttpClient();
         this.mapper = new ObjectMapper();
     }
-    
+
     // Point d'accès unique à l'instance
     public static ApiClientServices getInstance() {
         return INSTANCE;
@@ -48,7 +48,8 @@ public class ApiClientServices {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                return mapper.readValue(response.body(), new TypeReference<List<Trip>>(){});
+                return mapper.readValue(response.body(), new TypeReference<List<Trip>>() {
+                });
             }
         } catch (Exception e) {
             System.err.println("DEBUG: Erreur GET -> " + e.getMessage());
@@ -69,7 +70,8 @@ public class ApiClientServices {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                return mapper.readValue(response.body(), new TypeReference<List<Trip>>(){});
+                return mapper.readValue(response.body(), new TypeReference<List<Trip>>() {
+                });
             }
         } catch (Exception e) {
             System.err.println("DEBUG: Erreur GET trips for user -> " + e.getMessage());
@@ -95,7 +97,8 @@ public class ApiClientServices {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                return mapper.readValue(response.body(), new TypeReference<List<Trip>>(){});
+                return mapper.readValue(response.body(), new TypeReference<List<Trip>>() {
+                });
             }
         } catch (Exception e) {
             System.err.println("DEBUG: Erreur recherche -> " + e.getMessage());
@@ -118,7 +121,8 @@ public class ApiClientServices {
             System.out.println("DEBUG: Activities response status = " + response.statusCode());
 
             if (response.statusCode() == 200) {
-                return mapper.readValue(response.body(), new TypeReference<List<Activity>>(){});
+                return mapper.readValue(response.body(), new TypeReference<List<Activity>>() {
+                });
             }
         } catch (Exception e) {
             System.err.println("DEBUG: Erreur GET activities -> " + e.getMessage());
@@ -148,7 +152,7 @@ public class ApiClientServices {
         try {
             String url = BASE_URL + "/" + tripId;
             System.out.println("DEBUG: Sending DELETE to " + url);
-            
+
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .DELETE()
@@ -156,12 +160,78 @@ public class ApiClientServices {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println("DEBUG: Response status = " + response.statusCode());
-            
+
             return response.statusCode() == 200 || response.statusCode() == 204;
         } catch (Exception e) {
             System.err.println("DEBUG: DELETE error -> " + e.getMessage());
             e.printStackTrace();
             return false;
         }
+    }
+
+    // ========== FAVORITES ==========
+
+    public boolean addFavorite(Long userId, Long tripId) {
+        try {
+            String url = "http://localhost:8080/api/users/" + userId + "/favorites/" + tripId;
+            System.out.println("DEBUG: Adding favorite - POST to " + url);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .POST(HttpRequest.BodyPublishers.noBody())
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("DEBUG: Add favorite response status = " + response.statusCode());
+
+            return response.statusCode() == 200 || response.statusCode() == 201;
+        } catch (Exception e) {
+            System.err.println("DEBUG: Add favorite error -> " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean removeFavorite(Long userId, Long tripId) {
+        try {
+            String url = "http://localhost:8080/api/users/" + userId + "/favorites/" + tripId;
+            System.out.println("DEBUG: Removing favorite - DELETE to " + url);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .DELETE()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("DEBUG: Remove favorite response status = " + response.statusCode());
+
+            return response.statusCode() == 200 || response.statusCode() == 204;
+        } catch (Exception e) {
+            System.err.println("DEBUG: Remove favorite error -> " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<Trip> getFavorites(Long userId) {
+        try {
+            String url = "http://localhost:8080/api/users/" + userId + "/favorites";
+            System.out.println("DEBUG: Getting favorites for user " + userId);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                return mapper.readValue(response.body(), new TypeReference<List<Trip>>() {
+                });
+            }
+        } catch (Exception e) {
+            System.err.println("DEBUG: Get favorites error -> " + e.getMessage());
+        }
+        return Collections.emptyList();
     }
 }
