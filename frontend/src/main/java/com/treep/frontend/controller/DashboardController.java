@@ -3,6 +3,8 @@ package com.treep.frontend.controller;
 import com.treep.frontend.model.Activity;
 import com.treep.frontend.model.Trip;
 import com.treep.frontend.service.ApiClientServices;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -15,29 +17,53 @@ public class DashboardController {
     @FXML private TextField destInput;
     @FXML private TextField priceInput;
     @FXML private DatePicker dateInput;
-    @FXML private TextField activitiesInput;
+    @FXML private TextField activityInput;
+    @FXML private ListView<String> activityListView;
 
     private final ApiClientServices api = new ApiClientServices();
+    private final ObservableList<String> activities = FXCollections.observableArrayList();
+
+    @FXML
+    public void initialize() {
+        activityListView.setItems(activities);
+        
+        // Double-clic pour supprimer une activité
+        activityListView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                int selectedIndex = activityListView.getSelectionModel().getSelectedIndex();
+                if (selectedIndex >= 0) {
+                    activities.remove(selectedIndex);
+                }
+            }
+        });
+    }
+
+    @FXML
+    public void onAddActivity() {
+        String activityName = activityInput.getText();
+        if (activityName != null && !activityName.isBlank()) {
+            activities.add(activityName.trim());
+            activityInput.clear();
+            activityInput.requestFocus();
+        }
+    }
 
     @FXML
     public void onSubmit() {
         try {
-            List<Activity> activityList = new ArrayList<>();
             String dateDebut = (dateInput.getValue() != null) ? dateInput.getValue().toString() : "2025-01-01";
             
-            if (activitiesInput.getText() != null && !activitiesInput.getText().isBlank()) {
-                String[] rawActivities = activitiesInput.getText().split(",");
-                for (String actTitle : rawActivities) {
-                    Activity act = new Activity(
-                            null,
-                            actTitle.trim(),
-                            "Description par défaut",
-                            0.0,
-                            dateDebut + "T10:00:00",
-                            "To Do"
-                    );
-                    activityList.add(act);
-                }
+            List<Activity> activityList = new ArrayList<>();
+            for (String actName : activities) {
+                Activity act = new Activity(
+                        null,
+                        actName,
+                        "Description par défaut",
+                        0.0,
+                        dateDebut + "T10:00:00",
+                        "To Do"
+                );
+                activityList.add(act);
             }
 
             String dateFin = dateDebut;
@@ -53,7 +79,6 @@ public class DashboardController {
             );
 
             if (api.addTrip(newTrip)) {
-                // Fermer la fenêtre après création
                 Stage stage = (Stage) destInput.getScene().getWindow();
                 stage.close();
             } else {

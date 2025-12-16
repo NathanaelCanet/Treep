@@ -7,45 +7,48 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0"
+<BorderPane prefHeight="600.0" prefWidth="500.0"
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.treep.frontend.controller.DashboardController">
 
-
     <center>
-        <VBox spacing="20" alignment="CENTER_LEFT" styleClass="form-container">
-            <padding><Insets top="40" right="60" bottom="40" left="60"/></padding>
+        <VBox spacing="15" alignment="CENTER_LEFT" styleClass="panel, panel-default">
+            <padding><Insets top="30" right="40" bottom="30" left="40"/></padding>
 
-            <Label text="Ajouter un voyage" styleClass="title-label"/>
+            <Label text="Ajouter un voyage" styleClass="h3"/>
 
             <VBox spacing="5">
-                <Label text="Destination" styleClass="label-white"/>
-                <TextField fx:id="destInput" promptText="Ex: Tokyo, Japon"/>
+                <Label text="Destination" styleClass="lbl"/>
+                <TextField fx:id="destInput" promptText="Ex: Tokyo, Japon" styleClass="form-control"/>
             </VBox>
 
             <VBox spacing="5">
-                <Label text="Budget Total (€)" styleClass="label-white"/>
-                <TextField fx:id="priceInput" promptText="Ex: 2500.00"/>
+                <Label text="Budget Total (€)" styleClass="lbl"/>
+                <TextField fx:id="priceInput" promptText="Ex: 2500.00" styleClass="form-control"/>
             </VBox>
 
             <VBox spacing="5">
-                <Label text="Date de départ" styleClass="label-white"/>
+                <Label text="Date de départ" styleClass="lbl"/>
                 <DatePicker fx:id="dateInput" promptText="Sélectionner une date" maxWidth="Infinity"/>
             </VBox>
 
-            <VBox spacing="5">
-                <Label text="Activités (Optionnel)" styleClass="label-white"/>
-                <TextField fx:id="activitiesInput" promptText="Ex: Musée, Ski, Plage..."/>
-                <Label text="* Séparez par des virgules" style="-fx-font-size: 11px; -fx-text-fill: #bdc3c7;"/>
+            <VBox spacing="8">
+                <Label text="Activités" styleClass="lbl"/>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <TextField fx:id="activityInput" promptText="Nom de l'activité" HBox.hgrow="ALWAYS" styleClass="form-control"/>
+                    <Button text="+" onAction="#onAddActivity" styleClass="btn, btn-primary" prefWidth="40"/>
+                </HBox>
+                <ListView fx:id="activityListView" prefHeight="120" styleClass="list-group"/>
             </VBox>
 
             <VBox VBox.vgrow="ALWAYS" />
 
             <Button text="ENREGISTRER LE VOYAGE" onAction="#onSubmit"
-                    styleClass="button, btn-success"
+                    styleClass="btn, btn-success"
                     maxWidth="Infinity" prefHeight="45"/>
         </VBox>
     </center>
