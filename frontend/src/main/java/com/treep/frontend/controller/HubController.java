@@ -112,11 +112,15 @@ public class HubController {
 
         for (Trip trip : trips) {
             try {
+                // Charger le template FXML de la carte
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/trip-card.fxml"));
                 VBox card = loader.load();
+                
+                // Récupérer le contrôleur et lui passer les données
                 TripCardController cardController = loader.getController();
                 cardController.setTrip(trip);
                 cardController.setOnDeleteCallback(this::refreshHub);
+                
                 mainContainer.getChildren().add(card);
             } catch (IOException e) {
                 e.printStackTrace();
