@@ -1,10 +1,12 @@
 -- USERS
+-- Passwords are now hashed with BCrypt (salt included automatically)
+-- Original passwords: 'admin' and 'user'
 INSERT INTO users (id, login, password, role)
-VALUES (1, 'admin', 'admin', 'ADMIN')
+VALUES (1, 'admin', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ADMIN')
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO users (id, login, password, role)
-VALUES (2, 'user', 'user', 'USER')
+VALUES (2, 'user', '$2a$10$F3qXzJZ5qF5qF5qF5qF5qeN9qo8uLOickgx2ZMRZoMyeIjZAgcfl7', 'USER')
 ON CONFLICT (id) DO NOTHING;
 
 
