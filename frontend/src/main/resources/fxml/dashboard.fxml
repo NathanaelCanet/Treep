@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane prefHeight="600.0" prefWidth="800.0"
@@ -21,6 +25,9 @@
             <Label text="Voyages Disponibles" styleClass="subtitle-label"/>
 
             <ListView fx:id="tripList" VBox.vgrow="ALWAYS" styleClass="dark-list"/>
+
+            <Label text="Activités du Voyage" styleClass="subtitle-label"/>
+            <ListView fx:id="activityDisplayList" prefHeight="150.0" styleClass="dark-list"/>
 
             <Button text="Actualiser" onAction="#onRefresh" maxWidth="Infinity" styleClass="button, btn-secondary"/>
         </VBox>
@@ -48,9 +55,33 @@
             </VBox>
 
             <VBox spacing="5">
+                <Label text="Date de fin" styleClass="label-white"/>
+                <DatePicker fx:id="dateFinInput" promptText="Sélectionner une date" maxWidth="Infinity"/>
+            </VBox>
+
+            <VBox spacing="5">
                 <Label text="Activités (Optionnel)" styleClass="label-white"/>
-                <TextField fx:id="activitiesInput" promptText="Ex: Musée, Ski, Plage..."/>
-                <Label text="* Séparez par des virgules" style="-fx-font-size: 11px; -fx-text-fill: #bdc3c7;"/>
+                <VBox fx:id="activityInputContainer" spacing="10">
+                    <HBox spacing="10">
+                        <TextField fx:id="actTitleInput" promptText="Titre de l'activité" HBox.hgrow="ALWAYS"/>
+                        <TextField fx:id="actDescInput" promptText="Description" HBox.hgrow="ALWAYS"/>
+                    </HBox>
+                    <HBox spacing="10">
+                        <TextField fx:id="actCostInput" promptText="Coût (€)" prefWidth="100"/>
+                        <DatePicker fx:id="actDateInput" promptText="Date" prefWidth="150"/>
+                        <ComboBox fx:id="actStatusInput" promptText="Statut" prefWidth="100">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="To Do"/>
+                                    <String fx:value="Booked"/>
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
+                        <Button text="+" onAction="#onAddActivity" styleClass="button, btn-primary"/>
+                    </HBox>
+                </VBox>
+                <ListView fx:id="pendingActivitiesList" prefHeight="100" styleClass="dark-list"/>
+                <Label text="* Ajoutez les activités une par une" style="-fx-font-size: 11px; -fx-text-fill: #bdc3c7;"/>
             </VBox>
 
             <VBox VBox.vgrow="ALWAYS" />

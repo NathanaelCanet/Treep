@@ -97,3 +97,13 @@
 .btn-danger:hover {
     -fx-background-color: linear-gradient(to bottom right, #d63031, #e17055);
 }
+
+/* --- ACTIVITIES --- */
+.activity-label {
+    -fx-text-fill: #2d3436;
+    -fx-font-size: 14px;
+    -fx-padding: 5 0 5 10;
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-background-radius: 5;
+    -fx-margin: 2 0 2 0;
+}

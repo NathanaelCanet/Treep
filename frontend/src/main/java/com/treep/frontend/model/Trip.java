@@ -1,21 +1,14 @@
 package com.treep.frontend.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Trip {
     private Long id;
     private String destination;
-
-    @JsonProperty("date_debut")
-    private String dateDebut;
-
-    @JsonProperty("date_fin")
-    private String dateFin;
-
-    @JsonProperty("budget_total")
-    private Double budgetTotal;
+    private String dateDebut;    // Sera envoyé comme "dateDebut" dans le JSON
+    private String dateFin;      // Sera envoyé comme "dateFin"
+    private Double budgetTotal;  // Sera envoyé comme "budgetTotal"
 
     private List<Activity> activities = new ArrayList<>();
 
@@ -30,6 +23,7 @@ public class Trip {
         this.activities = activities;
     }
 
+    // Getters et Setters obligatoires
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

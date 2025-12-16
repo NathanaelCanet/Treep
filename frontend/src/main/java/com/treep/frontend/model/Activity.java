@@ -1,18 +1,11 @@
 package com.treep.frontend.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class Activity {
     private Long id;
     private String titre;
     private String description;
-
-    @JsonProperty("cout")
     private Double cout;
-
-    @JsonProperty("date_prevue")
-    private String datePrevue;
-
+    private String datePrevue; // Le JSON sera { "datePrevue": "..." }
     private String statut;
 
     public Activity() {}
@@ -24,6 +17,9 @@ public class Activity {
         this.datePrevue = datePrevue;
         this.statut = statut;
     }
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getTitre() { return titre; }
     public void setTitre(String titre) { this.titre = titre; }

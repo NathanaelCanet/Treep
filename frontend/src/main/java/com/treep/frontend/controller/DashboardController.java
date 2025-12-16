@@ -5,30 +5,42 @@ import com.treep.frontend.model.Trip;
 import com.treep.frontend.service.ApiClientServices;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DashboardController {
 
     @FXML private ListView<String> tripList;
-    @FXML private ListView<String> activityDisplayList;
+    @FXML private ListView<HBox> activityDisplayList;
     @FXML private TextField destInput;
     @FXML private TextField priceInput;
     @FXML private DatePicker dateInput;
-    @FXML private TextField activitiesInput;
+    @FXML private DatePicker dateFinInput;
+    @FXML private TextField actTitleInput;
+    @FXML private TextField actDescInput;
+    @FXML private TextField actCostInput;
+    @FXML private DatePicker actDateInput;
+    @FXML private ComboBox<String> actStatusInput;
+    @FXML private ListView<String> pendingActivitiesList;
 
-    private final ApiClientServices api = new ApiClientServices();
+    private final ApiClientServices api;
     private List<Trip> currentTrips = new ArrayList<>();
+    private List<Activity> currentActivities = new ArrayList<>();
+    private List<Activity> pendingActivities = new ArrayList<>();
+
+    public DashboardController(ApiClientServices api) {
+        this.api = api;
+    }
 
     @FXML
     public void initialize() {
         refreshData();
-
-        // Listener pour charger les activités quand on sélectionne un voyage
         tripList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             int selectedIndex = tripList.getSelectionModel().getSelectedIndex();
             onTripSelected(selectedIndex);
         });
+        if(actStatusInput != null) actStatusInput.setValue("To Do");
     }
 
     @FXML
@@ -37,45 +49,78 @@ public class DashboardController {
     }
 
     @FXML
+    public void onAddActivity() {
+        try {
+            String title = actTitleInput.getText().trim();
+            if (title.isEmpty()) {
+                showAlert("Erreur", "Le titre de l'activité est requis");
+                return;
+            }
+            String desc = actDescInput.getText().isEmpty() ? "Description par défaut" : actDescInput.getText();
+            double cost = actCostInput.getText().isEmpty() ? 0.0 : Double.parseDouble(actCostInput.getText());
+            
+            // --- ACTIVITÉ : On GARDE l'heure (backend: LocalDateTime) ---
+            String date = (actDateInput.getValue() != null) 
+                ? actDateInput.getValue().toString() + "T09:00:00" 
+                : (dateInput.getValue() != null ? dateInput.getValue().toString() + "T09:00:00" : "2025-01-01T09:00:00");
+            
+            String status = actStatusInput.getValue();
+
+            Activity act = new Activity(title, desc, cost, date, status);
+            pendingActivities.add(act);
+
+            pendingActivitiesList.getItems().add("• " + title + " (" + cost + "€)");
+
+            actTitleInput.clear();
+            actDescInput.clear();
+            actCostInput.clear();
+            actDateInput.setValue(null);
+            actStatusInput.setValue("To Do");
+
+        } catch (NumberFormatException e) {
+            showAlert("Erreur", "Le coût doit être un nombre");
+        }
+    }
+
+    @FXML
     public void onSubmit() {
         try {
-            List<Activity> activityList = new ArrayList<>();
-            if (activitiesInput.getText() != null && !activitiesInput.getText().isBlank()) {
-                String[] rawActivities = activitiesInput.getText().split(",");
-                for (String actTitle : rawActivities) {
-                    Activity act = new Activity(
-                            actTitle.trim(),
-                            "Description par défaut",
-                            0.0,
-                            "2025-01-01",
-                            "To Do"
-                    );
-                    activityList.add(act);
-                }
-            }
+            // --- CORRECTION VOYAGE : On ENLÈVE l'heure (backend: LocalDate) ---
+            String dateDebut = (dateInput.getValue() != null) 
+                ? dateInput.getValue().toString() // Juste la date YYYY-MM-DD
+                : "2025-01-01";
+                
+            String dateFin = (dateFinInput.getValue() != null) 
+                ? dateFinInput.getValue().toString() // Juste la date YYYY-MM-DD
+                : dateDebut;
+            // ------------------------------------------------------------------
 
-            String dateDebut = (dateInput.getValue() != null) ? dateInput.getValue().toString() : "2025-01-01";
-            String dateFin = dateDebut; // TODO: Ajouter un champ date fin plus tard
             Double budget = Double.parseDouble(priceInput.getText());
+            List<Activity> activityList = new ArrayList<>(pendingActivities);
 
-            Trip newTrip = new Trip(
-                    null,
-                    destInput.getText(),
-                    dateDebut,
-                    dateFin,
-                    budget,
-                    activityList
-            );
+            Trip tripToCreate = new Trip(null, destInput.getText(), dateDebut, dateFin, budget, new ArrayList<>());
 
-            if (api.addTrip(newTrip)) {
+            Trip createdTrip = api.addTrip(tripToCreate);
+            
+            if (createdTrip != null && createdTrip.getId() != null) {
+                for (Activity activity : activityList) {
+                    api.addActivity(createdTrip.getId(), activity);
+                }
                 refreshData();
                 clearForm();
+                
+                // Petit message de succès
+                Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle("Succès");
+                info.setHeaderText(null);
+                info.setContentText("Voyage créé avec succès !");
+                info.showAndWait();
             } else {
-                showAlert("Erreur", "Le backend ne répond pas !");
+                showAlert("Erreur", "Echec de création (Vérifiez les dates/budget).");
             }
 
         } catch (NumberFormatException e) {
-            showAlert("Erreur de Saisie", "Le budget doit être un chiffre (utilisez le point .)");
+            showAlert("Erreur de Saisie", "Le budget doit être un chiffre.");
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Erreur", e.getMessage());
@@ -87,32 +132,45 @@ public class DashboardController {
         tripList.getItems().clear();
         currentTrips = api.getAllTrips();
 
-        for (Trip t : currentTrips) {
-            String label = t.getDestination() + " (" + t.getBudgetTotal() + " €)";
-            tripList.getItems().add(label);
+        if (currentTrips != null) {
+            for (Trip t : currentTrips) {
+                tripList.getItems().add(t.getDestination() + " (" + t.getBudgetTotal() + " €)");
+            }
         }
     }
 
     private void onTripSelected(int index) {
-        if (index < 0 || index >= currentTrips.size()) {
-            return;
-        }
+        if (currentTrips == null || index < 0 || index >= currentTrips.size()) return;
 
         Trip selectedTrip = currentTrips.get(index);
         activityDisplayList.getItems().clear();
-        activityDisplayList.getItems().add("Chargement des activités...");
-
-        // Récupérer les activités du voyage sélectionné
-        List<Activity> activities = api.getActivitiesForTrip(selectedTrip.getId().toString());
-        activityDisplayList.getItems().clear();
-        activities.forEach(activity -> activityDisplayList.getItems().add(activity.getTitre() + " (" + activity.getCout() + "€)"));
+        
+        currentActivities = api.getActivitiesForTrip(selectedTrip.getId().toString());
+        
+        if (currentActivities != null && !currentActivities.isEmpty()) {
+            for (Activity activity : currentActivities) {
+                Label actLabel = new Label("• " + activity.getTitre() + " - " + activity.getCout() + "€ [" + activity.getStatut() + "]");
+                actLabel.setStyle("-fx-text-fill: white; -fx-font-size: 13px;");
+                activityDisplayList.getItems().add(new HBox(actLabel));
+            }
+        } else {
+            Label empty = new Label("Aucune activité.");
+            empty.setStyle("-fx-text-fill: gray;");
+            activityDisplayList.getItems().add(new HBox(empty));
+        }
     }
 
     private void clearForm() {
         destInput.clear();
         priceInput.clear();
-        activitiesInput.clear();
         dateInput.setValue(null);
+        dateFinInput.setValue(null);
+        pendingActivities.clear();
+        pendingActivitiesList.getItems().clear();
+        actTitleInput.clear();
+        actDescInput.clear();
+        actCostInput.clear();
+        actDateInput.setValue(null);
     }
 
     private void showAlert(String title, String content) {

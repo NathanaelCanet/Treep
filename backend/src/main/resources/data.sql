@@ -22,3 +22,7 @@ ON CONFLICT (id) DO NOTHING;
 INSERT INTO activity (id, titre, description, cout, date_prevue, statut, trip_id)
 VALUES (20, 'British Museum', 'See the Rosetta Stone.', 0.0, '2025-06-06 14:00:00', 'To Do', 2)
 ON CONFLICT (id) DO NOTHING;
+
+-- Reset sequences
+ALTER SEQUENCE trip_id_seq RESTART WITH 3;
+ALTER SEQUENCE activity_id_seq RESTART WITH 21;
