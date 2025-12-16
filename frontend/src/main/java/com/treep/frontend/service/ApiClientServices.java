@@ -50,6 +50,28 @@ public class ApiClientServices {
         return Collections.emptyList();
     }
 
+    // Recherche des voyages par titre
+    public List<Trip> searchTrips(String destination) {
+        try {
+            String url = BASE_URL + "/search?destination=" + java.net.URLEncoder.encode(destination, "UTF-8");
+            System.out.println("DEBUG: Searching trips with destination: " + destination);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                return mapper.readValue(response.body(), new TypeReference<List<Trip>>(){});
+            }
+        } catch (Exception e) {
+            System.err.println("DEBUG: Erreur recherche -> " + e.getMessage());
+        }
+        return Collections.emptyList();
+    }
+
     // GET - Récupérer les activités d'un voyage donné
     public List<Activity> getActivitiesForTrip(String tripId) {
         try {
