@@ -17,7 +17,11 @@ public class Activity {
 
     @JsonProperty("description")
     private String description;
+
+    @JsonProperty("cout")
     private Double cout;
+
+    @JsonProperty("datePrevue")
     private String datePrevue;
 
     @JsonProperty("statut")

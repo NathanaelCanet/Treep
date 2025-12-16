@@ -17,8 +17,14 @@ public class Trip {
 
     @JsonProperty("destination")
     private String destination;
+
+    @JsonProperty("dateDebut")
     private String dateDebut;
+
+    @JsonProperty("dateFin")
     private String dateFin;
+
+    @JsonProperty("budgetTotal")
     private Double budgetTotal;
 
     @JsonProperty("activities")
