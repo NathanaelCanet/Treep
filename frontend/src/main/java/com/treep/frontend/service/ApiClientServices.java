@@ -66,6 +66,9 @@ public class ApiClientServices {
     public boolean addTrip(Trip trip) {
         try {
             String json = mapper.writeValueAsString(trip);
+            System.out.println("DEBUG: Sending POST to " + BASE_URL);
+            System.out.println("DEBUG: JSON payload = " + json);
+            
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(BASE_URL))
                     .header("Content-Type", "application/json")
@@ -73,8 +76,12 @@ public class ApiClientServices {
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("DEBUG: Response status = " + response.statusCode());
+            System.out.println("DEBUG: Response body = " + response.body());
+            
             return response.statusCode() == 200 || response.statusCode() == 201;
         } catch (Exception e) {
+            System.err.println("DEBUG: POST error -> " + e.getMessage());
             e.printStackTrace();
             return false;
         }
