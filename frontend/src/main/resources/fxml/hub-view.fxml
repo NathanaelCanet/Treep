@@ -4,36 +4,48 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.treep.frontend.controller.HubController">
+<BorderPane prefHeight="700.0" prefWidth="1000.0" 
+            xmlns="http://javafx.com/javafx/21" 
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.treep.frontend.controller.HubController"
+            styleClass="panel">
 
     <top>
-        <HBox alignment="CENTER_LEFT" prefHeight="80.0" spacing="20.0" style="-fx-background-color: #2c3e50;">
-            <children>
-                <Label text="TREEP HUB" textFill="WHITE">
-                    <font>
-                        <Font name="Segoe UI Bold" size="28.0" />
-                    </font>
-                </Label>
-                <Button mnemonicParsing="false" onAction="#onRefresh" styleClass="button, btn-secondary" text="Rafraîchir" />
-                <Button mnemonicParsing="false" onAction="#onOpenCreate" styleClass="button, btn-success" text="+ Créer Voyage" />
-            </children>
-            <padding>
-                <Insets left="30.0" right="30.0" />
-            </padding>
-        </HBox>
+        <StackPane prefHeight="60.0">
+            <Label text="Treep" styleClass="h2" StackPane.alignment="CENTER">
+                <font>
+                    <Font name="Segoe UI Bold" size="28.0" />
+                </font>
+                <graphic>
+                    <ImageView fitHeight="32.0" fitWidth="32.0" preserveRatio="true">
+                        <image>
+                            <Image url="@../images/plane-emoji.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+                <contentDisplay xmlns:fx="http://javafx.com/fxml">RIGHT</contentDisplay>
+            </Label>
+            <HBox alignment="CENTER_RIGHT" StackPane.alignment="CENTER_RIGHT">
+                <padding>
+                    <Insets right="30.0" />
+                </padding>
+                <Button mnemonicParsing="false" onAction="#onOpenCreate" text="+ Créer Voyage" styleClass="btn, btn-primary" />
+            </HBox>
+        </StackPane>
     </top>
 
     <center>
-        <ScrollPane fitToWidth="true" style="-fx-background: #ecf0f1; -fx-border-color: transparent;">
+        <ScrollPane fitToWidth="true" styleClass="panel">
             <content>
-                <VBox fx:id="mainContainer" alignment="TOP_CENTER" spacing="15.0">
+                <VBox fx:id="mainContainer" alignment="TOP_CENTER" spacing="15.0" styleClass="panel-body">
                     <padding>
                         <Insets bottom="30.0" left="100.0" right="100.0" top="30.0" />
                     </padding>
