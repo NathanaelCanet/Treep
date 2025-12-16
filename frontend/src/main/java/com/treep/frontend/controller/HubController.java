@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -16,6 +17,7 @@ import java.util.List;
 public class HubController {
 
     @FXML private VBox mainContainer;
+    @FXML private TextField searchField;
 
     private final ApiClientServices api = new ApiClientServices();
 
@@ -26,7 +28,29 @@ public class HubController {
 
     @FXML
     public void onRefresh() {
+        searchField.clear();
         refreshHub();
+    }
+
+    @FXML
+    public void onSearch() {
+        String searchText = searchField.getText().trim();
+        mainContainer.getChildren().clear();
+        
+        List<Trip> trips = searchText.isEmpty() ? api.getAllTrips() : api.searchTrips(searchText);
+
+        for (Trip trip : trips) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/trip-card.fxml"));
+                VBox card = loader.load();
+                TripCardController cardController = loader.getController();
+                cardController.setTrip(trip);
+                cardController.setOnDeleteCallback(this::refreshHub);
+                mainContainer.getChildren().add(card);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @FXML

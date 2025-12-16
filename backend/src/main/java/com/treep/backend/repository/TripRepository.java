@@ -10,6 +10,6 @@ import com.treep.backend.model.Trip;
 @Repository
 public interface TripRepository extends JpaRepository<Trip, Long> {
     
-    // Recherche par destination (insensible à la casse, contient)
+    // Recherche par destination
     List<Trip> findByDestinationContainingIgnoreCase(String destination);
 }
