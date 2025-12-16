@@ -9,6 +9,7 @@ public class Activity {
     private String titre;
     private String description;
     private Double cout;
+    private String datePrevue;
     private String statut;
 
     public Activity() {}
