@@ -19,10 +19,7 @@ public class Activity {
     private String description;
     private Double cout;
     private String datePrevue;
-<<<<<<< HEAD
-=======
 
     @JsonProperty("statut")
->>>>>>> 50cae20 (feat(frontend): Mappage des des différents modeles)
     private String statut;
 }

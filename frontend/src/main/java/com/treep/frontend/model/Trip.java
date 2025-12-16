@@ -20,10 +20,7 @@ public class Trip {
     private String dateDebut;
     private String dateFin;
     private Double budgetTotal;
-<<<<<<< HEAD
-=======
 
     @JsonProperty("activities")
->>>>>>> 50cae20 (feat(frontend): Mappage des des différents modeles)
     private List<Activity> activities = new ArrayList<>();
 }
