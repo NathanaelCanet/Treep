@@ -22,11 +22,3 @@ ON CONFLICT (id) DO NOTHING;
 INSERT INTO activity (id, titre, description, cout, date_prevue, statut, trip_id)
 VALUES (20, 'British Museum', 'See the Rosetta Stone.', 0.0, '2025-06-06 14:00:00', 'To Do', 2)
 ON CONFLICT (id) DO NOTHING;
-
-
--- ============================================
--- RESET SEQUENCES to avoid duplicate key errors
--- ============================================
--- This ensures that the next auto-generated ID will be greater than the max existing ID
-SELECT setval('trip_id_seq', (SELECT COALESCE(MAX(id), 0) + 1 FROM trip), false);
-SELECT setval('activity_id_seq', (SELECT COALESCE(MAX(id), 0) + 1 FROM activity), false);

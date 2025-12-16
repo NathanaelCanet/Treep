@@ -8,13 +8,13 @@ public class Trip {
     private Long id;
     private String destination;
 
-    @JsonProperty("dateDebut")
+    @JsonProperty("date_debut")
     private String dateDebut;
 
-    @JsonProperty("dateFin")
+    @JsonProperty("date_fin")
     private String dateFin;
 
-    @JsonProperty("budgetTotal")
+    @JsonProperty("budget_total")
     private Double budgetTotal;
 
     private List<Activity> activities = new ArrayList<>();
