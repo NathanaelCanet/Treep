@@ -130,8 +130,7 @@ public class ApiClientServices {
     public boolean deleteTrip(Long tripId) {
         try {
             String url = TRIPS + "/" + tripId;
-            System.out.println("[API DEBUG] TENTATIVE DELETE TRIP: " + url); // <-- Le mouchard est ici
-
+            System.out.println("[API DEBUG] TENTATIVE DELETE TRIP: " + url);
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .DELETE()

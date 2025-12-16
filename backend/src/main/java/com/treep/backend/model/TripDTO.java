@@ -8,7 +8,7 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TripDTO {
     private String destination;
-    private LocalDate dateDebut;   // Attend "dateDebut" du JSON
-    private LocalDate dateFin;     // Attend "dateFin" du JSON
-    private Double budgetTotal;    // Attend "budgetTotal" du JSON
+    private LocalDate dateDebut;
+    private LocalDate dateFin;
+    private Double budgetTotal;
 }

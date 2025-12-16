@@ -20,7 +20,6 @@ public class DashboardController {
     @FXML private TextField actTitleInput;
     @FXML private TextField actDescInput;
     @FXML private TextField actCostInput;
-    @FXML private DatePicker actDateInput;
     @FXML private ComboBox<String> actStatusInput;
     @FXML private ListView<String> pendingActivitiesList;
 
@@ -58,15 +57,9 @@ public class DashboardController {
             }
             String desc = actDescInput.getText().isEmpty() ? "Description par défaut" : actDescInput.getText();
             double cost = actCostInput.getText().isEmpty() ? 0.0 : Double.parseDouble(actCostInput.getText());
-            
-            // --- ACTIVITÉ : On GARDE l'heure (backend: LocalDateTime) ---
-            String date = (actDateInput.getValue() != null) 
-                ? actDateInput.getValue().toString() + "T09:00:00" 
-                : (dateInput.getValue() != null ? dateInput.getValue().toString() + "T09:00:00" : "2025-01-01T09:00:00");
-            
             String status = actStatusInput.getValue();
 
-            Activity act = new Activity(title, desc, cost, date, status);
+            Activity act = new Activity(title, desc, cost, status);
             pendingActivities.add(act);
 
             pendingActivitiesList.getItems().add("• " + title + " (" + cost + "€)");
@@ -74,7 +67,6 @@ public class DashboardController {
             actTitleInput.clear();
             actDescInput.clear();
             actCostInput.clear();
-            actDateInput.setValue(null);
             actStatusInput.setValue("To Do");
 
         } catch (NumberFormatException e) {
@@ -85,15 +77,13 @@ public class DashboardController {
     @FXML
     public void onSubmit() {
         try {
-            // --- CORRECTION VOYAGE : On ENLÈVE l'heure (backend: LocalDate) ---
             String dateDebut = (dateInput.getValue() != null) 
-                ? dateInput.getValue().toString() // Juste la date YYYY-MM-DD
+                ? dateInput.getValue().toString()
                 : "2025-01-01";
                 
             String dateFin = (dateFinInput.getValue() != null) 
-                ? dateFinInput.getValue().toString() // Juste la date YYYY-MM-DD
+                ? dateFinInput.getValue().toString()
                 : dateDebut;
-            // ------------------------------------------------------------------
 
             Double budget = Double.parseDouble(priceInput.getText());
             List<Activity> activityList = new ArrayList<>(pendingActivities);
@@ -109,7 +99,6 @@ public class DashboardController {
                 refreshData();
                 clearForm();
                 
-                // Petit message de succès
                 Alert info = new Alert(Alert.AlertType.INFORMATION);
                 info.setTitle("Succès");
                 info.setHeaderText(null);
@@ -170,7 +159,6 @@ public class DashboardController {
         actTitleInput.clear();
         actDescInput.clear();
         actCostInput.clear();
-        actDateInput.setValue(null);
     }
 
     private void showAlert(String title, String content) {

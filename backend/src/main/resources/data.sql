@@ -9,18 +9,19 @@ ON CONFLICT (id) DO NOTHING;
 
 
 -- ACTIVITIES (Linked to Trip ID 1)
-INSERT INTO activity (id, titre, description, cout, date_prevue, statut, trip_id)
-VALUES (10, 'Senso-ji Temple', 'Oldest temple in Tokyo.', 0.0, '2025-04-11 09:30:00', 'To Do', 1)
+-- Note: On a retiré date_prevue des colonnes et des valeurs
+INSERT INTO activity (id, titre, description, cout, statut, trip_id)
+VALUES (10, 'Senso-ji Temple', 'Oldest temple in Tokyo.', 0.0, 'To Do', 1)
 ON CONFLICT (id) DO NOTHING;
 
-INSERT INTO activity (id, titre, description, cout, date_prevue, statut, trip_id)
-VALUES (11, 'Sushi Ginza', 'Reservation required.', 120.50, '2025-04-12 20:00:00', 'Booked', 1)
+INSERT INTO activity (id, titre, description, cout, statut, trip_id)
+VALUES (11, 'Sushi Ginza', 'Reservation required.', 120.50, 'Booked', 1)
 ON CONFLICT (id) DO NOTHING;
 
 
 -- ACTIVITIES (Linked to Trip ID 2)
-INSERT INTO activity (id, titre, description, cout, date_prevue, statut, trip_id)
-VALUES (20, 'British Museum', 'See the Rosetta Stone.', 0.0, '2025-06-06 14:00:00', 'To Do', 2)
+INSERT INTO activity (id, titre, description, cout, statut, trip_id)
+VALUES (20, 'British Museum', 'See the Rosetta Stone.', 0.0, 'To Do', 2)
 ON CONFLICT (id) DO NOTHING;
 
 -- Reset sequences

@@ -23,7 +23,6 @@
             <padding><Insets top="20" right="15" bottom="20" left="15"/></padding>
 
             <Label text="Voyages Disponibles" styleClass="subtitle-label"/>
-
             <ListView fx:id="tripList" VBox.vgrow="ALWAYS" styleClass="dark-list"/>
 
             <Label text="Activités du Voyage" styleClass="subtitle-label"/>
@@ -68,8 +67,7 @@
                     </HBox>
                     <HBox spacing="10">
                         <TextField fx:id="actCostInput" promptText="Coût (€)" prefWidth="100"/>
-                        <DatePicker fx:id="actDateInput" promptText="Date" prefWidth="150"/>
-                        <ComboBox fx:id="actStatusInput" promptText="Statut" prefWidth="100">
+                        <ComboBox fx:id="actStatusInput" promptText="Statut" prefWidth="120">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
                                     <String fx:value="To Do"/>

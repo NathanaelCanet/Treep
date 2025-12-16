@@ -1,20 +1,22 @@
 package com.treep.frontend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Activity {
+    
     private Long id;
     private String titre;
     private String description;
     private Double cout;
-    private String datePrevue; // Le JSON sera { "datePrevue": "..." }
     private String statut;
 
     public Activity() {}
 
-    public Activity(String titre, String description, Double cout, String datePrevue, String statut) {
+    public Activity(String titre, String description, Double cout, String statut) {
         this.titre = titre;
         this.description = description;
         this.cout = cout;
-        this.datePrevue = datePrevue;
         this.statut = statut;
     }
 
@@ -29,9 +31,6 @@ public class Activity {
 
     public Double getCout() { return cout; }
     public void setCout(Double cout) { this.cout = cout; }
-
-    public String getDatePrevue() { return datePrevue; }
-    public void setDatePrevue(String datePrevue) { this.datePrevue = datePrevue; }
 
     public String getStatut() { return statut; }
     public void setStatut(String statut) { this.statut = statut; }

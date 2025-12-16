@@ -30,7 +30,7 @@ public class Trip {
     private Double budgetTotal;
     
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JsonManagedReference 
+    @JsonManagedReference
     @ToString.Exclude
     private List<Activity> activities = new ArrayList<>();
 
