@@ -21,7 +21,7 @@ public class TripCardController {
 
     private Trip trip;
     private Runnable onDeleteCallback;
-    private final ApiClientServices api = new ApiClientServices();
+    private final ApiClientServices api = ApiClientServices.getInstance();
 
     /**
      * Initialise la carte avec les données du voyage

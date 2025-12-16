@@ -17,7 +17,7 @@ public class HubController {
 
     @FXML private VBox mainContainer;
 
-    private final ApiClientServices api = new ApiClientServices();
+    private final ApiClientServices api = ApiClientServices.getInstance();
 
     @FXML
     public void initialize() {

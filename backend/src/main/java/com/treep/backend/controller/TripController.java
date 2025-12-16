@@ -2,7 +2,6 @@ package com.treep.backend.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,12 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.treep.backend.model.Trip;
 import com.treep.backend.repository.TripRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/api/trips")
+@RequiredArgsConstructor
 public class TripController {
 
-    @Autowired
-    private TripRepository tripRepo;
+    private final TripRepository tripRepo;
 
     @GetMapping
     public List<Trip> getAllTrips() {
