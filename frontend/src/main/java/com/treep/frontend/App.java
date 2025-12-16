@@ -10,14 +10,14 @@ import java.util.Objects;
 public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        // Chargement du FXML Hub
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/hub-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 700);
+        // Chargement du FXML Authentification
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/auth-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 400, 500);
 
         // Ajouter BootstrapFX
         scene.getStylesheets().add(org.kordamp.bootstrapfx.BootstrapFX.bootstrapFXStylesheet());
 
-        stage.setTitle("Treep - Hub");
+        stage.setTitle("Treep - Connexion");
         stage.setScene(scene);
         stage.show();
     }
