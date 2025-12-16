@@ -18,6 +18,7 @@ public class DashboardController {
     @FXML private TextField destInput;
     @FXML private TextField priceInput;
     @FXML private DatePicker dateInput;
+    @FXML private DatePicker dateFinInput;
     @FXML private TextField activityInput;
     @FXML private ListView<String> activityListView;
 
@@ -53,6 +54,13 @@ public class DashboardController {
     public void onSubmit() {
         try {
             String dateDebut = (dateInput.getValue() != null) ? dateInput.getValue().toString() : "2025-01-01";
+            String dateFin = (dateFinInput.getValue() != null) ? dateFinInput.getValue().toString() : dateDebut;
+            
+            // Vérifier que la date de fin n'est pas avant la date de début
+            if (dateInput.getValue() != null && dateFinInput.getValue() != null && dateFinInput.getValue().isBefore(dateInput.getValue())) {
+                showAlert("Erreur", "La date de fin ne peut pas être avant la date de début.");
+                return;
+            }
             
             List<Activity> activityList = new ArrayList<>();
             for (String actName : activities) {
@@ -67,7 +75,6 @@ public class DashboardController {
                 activityList.add(act);
             }
 
-            String dateFin = dateDebut;
             Double budget = Double.parseDouble(priceInput.getText());
 
                 Trip newTrip = new Trip(

@@ -36,6 +36,11 @@
                 <DatePicker fx:id="dateInput" promptText="Sélectionner une date" maxWidth="Infinity"/>
             </VBox>
 
+            <VBox spacing="5">
+                <Label text="Date de fin" styleClass="lbl"/>
+                <DatePicker fx:id="dateFinInput" promptText="Sélectionner une date" maxWidth="Infinity"/>
+            </VBox>
+
             <VBox spacing="8">
                 <Label text="Activités" styleClass="lbl"/>
                 <HBox spacing="10" alignment="CENTER_LEFT">
