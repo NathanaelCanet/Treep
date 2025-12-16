@@ -79,4 +79,26 @@ public class ApiClientServices {
             return false;
         }
     }
+
+    // INFO: DELETE - Supprimer un voyage par son ID
+    public boolean deleteTrip(Long tripId) {
+        try {
+            String url = BASE_URL + "/" + tripId;
+            System.out.println("DEBUG: Sending DELETE to " + url);
+            
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .DELETE()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("DEBUG: Response status = " + response.statusCode());
+            
+            return response.statusCode() == 200 || response.statusCode() == 204;
+        } catch (Exception e) {
+            System.err.println("DEBUG: DELETE error -> " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

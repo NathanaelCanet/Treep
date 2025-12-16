@@ -3,7 +3,9 @@ package com.treep.backend.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,5 +29,15 @@ public class TripController {
     @PostMapping
     public Trip createTrip(@RequestBody Trip trip) {
         return tripRepo.save(trip);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteTrip(@PathVariable Long id) {
+        tripRepo.deleteById(id);
+    }
+
+    @DeleteMapping
+    public void deleteTrip(@RequestBody Trip trip) {
+        tripRepo.delete(trip);
     }
 }

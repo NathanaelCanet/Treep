@@ -8,9 +8,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -83,10 +86,17 @@ public class HubController {
         titleBox.getChildren().addAll(destLabel, dateLabel);
 
         Button btnBudget = new Button(trip.getBudgetTotal() + " €");
-        btnBudget.getStyleClass().addAll("button", "btn-danger"); // Bouton rouge arrondi
+        btnBudget.getStyleClass().addAll("button", "btn-secondary");
+
+        Button btnDelete = new Button("Supprimer");
+        btnDelete.getStyleClass().addAll("button", "btn-danger");
+        btnDelete.setOnAction(e -> deleteTrip(trip));
+
+        HBox buttonsBox = new HBox(10);
+        buttonsBox.getChildren().addAll(btnBudget, btnDelete);
 
         header.setLeft(titleBox);
-        header.setRight(btnBudget);
+        header.setRight(buttonsBox);
 
         // 3. CONTENU ACTIVITÉS
         VBox contentBox = new VBox(6);
@@ -113,5 +123,26 @@ public class HubController {
         VBox.setMargin(card, new Insets(0, 0, 20, 0));
 
         return card;
+    }
+
+    private void deleteTrip(Trip trip) {
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Confirmation");
+        confirm.setHeaderText("Supprimer le voyage ?");
+        confirm.setContentText("Voulez-vous vraiment supprimer le voyage vers " + trip.getDestination() + " ?");
+
+        confirm.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                if (api.deleteTrip(trip.getId())) {
+                    refreshHub();
+                } else {
+                    Alert error = new Alert(Alert.AlertType.ERROR);
+                    error.setTitle("Erreur");
+                    error.setHeaderText(null);
+                    error.setContentText("Impossible de supprimer le voyage.");
+                    error.showAndWait();
+                }
+            }
+        });
     }
 }
