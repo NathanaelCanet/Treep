@@ -1,10 +1,20 @@
--- TRIPS (ID 1 & 2)
-INSERT INTO trip (id, destination, date_debut, date_fin, budget_total)
-VALUES (1, 'Japan - Tokyo & Kyoto', '2025-04-10', '2025-04-24', 4500.00)
+-- USERS
+INSERT INTO users (id, login, password, role)
+VALUES (1, 'admin', 'admin', 'ADMIN')
 ON CONFLICT (id) DO NOTHING;
 
-INSERT INTO trip (id, destination, date_debut, date_fin, budget_total)
-VALUES (2, 'London - Weekend', '2025-06-05', '2025-06-08', 850.00)
+INSERT INTO users (id, login, password, role)
+VALUES (2, 'user', 'user', 'USER')
+ON CONFLICT (id) DO NOTHING;
+
+
+-- TRIPS (ID 1 & 2)
+INSERT INTO trip (id, destination, date_debut, date_fin, budget_total, user_id)
+VALUES (1, 'Japan - Tokyo & Kyoto', '2025-04-10', '2025-04-24', 4500.00, 2)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO trip (id, destination, date_debut, date_fin, budget_total, user_id)
+VALUES (2, 'London - Weekend', '2025-06-05', '2025-06-08', 850.00, 2)
 ON CONFLICT (id) DO NOTHING;
 
 
@@ -22,3 +32,9 @@ ON CONFLICT (id) DO NOTHING;
 INSERT INTO activity (id, titre, description, cout, date_prevue, statut, trip_id)
 VALUES (20, 'British Museum', 'See the Rosetta Stone.', 0.0, '2025-06-06 14:00:00', 'To Do', 2)
 ON CONFLICT (id) DO NOTHING;
+
+
+-- Reset sequences to avoid duplicate key errors
+SELECT setval('users_id_seq', (SELECT COALESCE(MAX(id), 1) FROM users));
+SELECT setval('trip_id_seq', (SELECT COALESCE(MAX(id), 1) FROM trip));
+SELECT setval('activity_id_seq', (SELECT COALESCE(MAX(id), 1) FROM activity));
