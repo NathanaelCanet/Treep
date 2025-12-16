@@ -7,11 +7,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 public class HubController {
 
@@ -36,14 +36,24 @@ public class HubController {
             Parent root = fxmlLoader.load();
             Stage stage = new Stage();
 
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/hub.css")).toExternalForm());
+            // Rendre le popup modal (bloque l'interaction avec le hub)
+            stage.initModality(Modality.APPLICATION_MODAL);
+            Stage ownerStage = (Stage) mainContainer.getScene().getWindow();
+            stage.initOwner(ownerStage);
 
+            Scene scene = new Scene(root);
             stage.setTitle("Nouveau Voyage");
             stage.setScene(scene);
-            stage.show();
 
-            stage.setOnHidden(e -> onRefresh());
+            // Centrer le popup par rapport au hub
+            stage.setOnShown(e -> {
+                stage.setX(ownerStage.getX() + (ownerStage.getWidth() - stage.getWidth()) / 2);
+                stage.setY(ownerStage.getY() + (ownerStage.getHeight() - stage.getHeight()) / 2);
+            });
+
+            stage.showAndWait(); // Attend que le popup soit fermé
+
+            onRefresh(); // Rafraîchir après fermeture
         } catch (Exception e) {
             e.printStackTrace();
         }

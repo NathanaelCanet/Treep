@@ -5,42 +5,26 @@ import com.treep.frontend.model.Trip;
 import com.treep.frontend.service.ApiClientServices;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class DashboardController {
 
-    @FXML private ListView<String> tripList;
-    @FXML private ListView<String> activityDisplayList;
     @FXML private TextField destInput;
     @FXML private TextField priceInput;
     @FXML private DatePicker dateInput;
     @FXML private TextField activitiesInput;
 
     private final ApiClientServices api = new ApiClientServices();
-    private List<Trip> currentTrips = new ArrayList<>();
-
-    @FXML
-    public void initialize() {
-        refreshData();
-
-        // Listener pour charger les activités quand on sélectionne un voyage
-        tripList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            int selectedIndex = tripList.getSelectionModel().getSelectedIndex();
-            onTripSelected(selectedIndex);
-        });
-    }
-
-    @FXML
-    public void onRefresh() {
-        refreshData();
-    }
 
     @FXML
     public void onSubmit() {
         try {
             List<Activity> activityList = new ArrayList<>();
             String dateDebut = (dateInput.getValue() != null) ? dateInput.getValue().toString() : "2025-01-01";
+            
             if (activitiesInput.getText() != null && !activitiesInput.getText().isBlank()) {
                 String[] rawActivities = activitiesInput.getText().split(",");
                 for (String actTitle : rawActivities) {
@@ -49,15 +33,14 @@ public class DashboardController {
                             actTitle.trim(),
                             "Description par défaut",
                             0.0,
-                            dateDebut + "T10:00:00", //format LocalDateTime requis pour le backend
+                            dateDebut + "T10:00:00",
                             "To Do"
                     );
                     activityList.add(act);
                 }
             }
 
-            
-            String dateFin = dateDebut; // TODO: Ajouter un champ date fin plus tard
+            String dateFin = dateDebut;
             Double budget = Double.parseDouble(priceInput.getText());
 
             Trip newTrip = new Trip(
@@ -70,8 +53,9 @@ public class DashboardController {
             );
 
             if (api.addTrip(newTrip)) {
-                refreshData();
-                clearForm();
+                // Fermer la fenêtre après création
+                Stage stage = (Stage) destInput.getScene().getWindow();
+                stage.close();
             } else {
                 showAlert("Erreur", "Le backend ne répond pas !");
             }
@@ -82,39 +66,6 @@ public class DashboardController {
             e.printStackTrace();
             showAlert("Erreur", e.getMessage());
         }
-    }
-
-    private void refreshData() {
-        activityDisplayList.getItems().clear();
-        tripList.getItems().clear();
-        currentTrips = api.getAllTrips();
-
-        for (Trip t : currentTrips) {
-            String label = t.getDestination() + " (" + t.getBudgetTotal() + " €)";
-            tripList.getItems().add(label);
-        }
-    }
-
-    private void onTripSelected(int index) {
-        if (index < 0 || index >= currentTrips.size()) {
-            return;
-        }
-
-        Trip selectedTrip = currentTrips.get(index);
-        activityDisplayList.getItems().clear();
-        activityDisplayList.getItems().add("Chargement des activités...");
-
-        // Récupérer les activités du voyage sélectionné
-        List<Activity> activities = api.getActivitiesForTrip(selectedTrip.getId().toString());
-        activityDisplayList.getItems().clear();
-        activities.forEach(activity -> activityDisplayList.getItems().add(activity.getTitre() + " (" + activity.getCout() + "€)"));
-    }
-
-    private void clearForm() {
-        destInput.clear();
-        priceInput.clear();
-        activitiesInput.clear();
-        dateInput.setValue(null);
     }
 
     private void showAlert(String title, String content) {

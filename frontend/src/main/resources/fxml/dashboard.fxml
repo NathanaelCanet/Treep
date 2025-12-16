@@ -14,21 +14,6 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.treep.frontend.controller.DashboardController">
 
-    <left>
-        <VBox spacing="10" styleClass="sidebar">
-            <padding><Insets top="20" right="15" bottom="20" left="15"/></padding>
-
-            <Label text="Voyages Disponibles" styleClass="subtitle-label"/>
-
-            <ListView fx:id="tripList" VBox.vgrow="ALWAYS" styleClass="dark-list"/>
-
-            <Label text="Activités du voyage" styleClass="subtitle-label"/>
-
-            <ListView fx:id="activityDisplayList" VBox.vgrow="ALWAYS" styleClass="dark-list"/>
-
-            <Button text="Actualiser" onAction="#onRefresh" maxWidth="Infinity" styleClass="button, btn-secondary"/>
-        </VBox>
-    </left>
 
     <center>
         <VBox spacing="20" alignment="CENTER_LEFT" styleClass="form-container">

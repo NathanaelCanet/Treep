@@ -26,7 +26,7 @@
         </left>
         <right>
             <HBox spacing="10" alignment="CENTER_RIGHT">
-                <Button fx:id="budgetButton" styleClass="btn, btn-info" />
+                <Button fx:id="budgetButton" styleClass="btn, btn-success" />
                 <Button fx:id="deleteButton" text="Supprimer" styleClass="btn, btn-danger" onAction="#onDelete" />
             </HBox>
         </right>

@@ -43,8 +43,7 @@ public class TripCardController {
             activitiesContainer.getChildren().add(emptyLabel);
         } else {
             for (Activity act : trip.getActivities()) {
-                String icon = "Booked".equalsIgnoreCase(act.getStatut()) ? "✅" : "📅";
-                Label actLabel = new Label(icon + " " + act.getTitre());
+                Label actLabel = new Label("• " + act.getTitre());
                 actLabel.getStyleClass().addAll("lbl", "lbl-default");
                 activitiesContainer.getChildren().add(actLabel);
             }
