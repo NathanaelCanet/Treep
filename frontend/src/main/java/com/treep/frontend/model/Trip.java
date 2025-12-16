@@ -35,4 +35,7 @@ public class Trip {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("user")
     private User user;
+
+    @JsonProperty("isPrivate")
+    private Boolean isPrivate = false;
 }

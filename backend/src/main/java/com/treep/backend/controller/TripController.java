@@ -27,12 +27,14 @@ public class TripController {
 
     @GetMapping
     public List<Trip> getAllTrips() {
-        return tripRepo.findAll();
+        // Retourne uniquement les voyages publics (non privés ou NULL)
+        return tripRepo.findByIsPrivateFalseOrIsPrivateIsNull();
     }
 
     @GetMapping("/search")
     public List<Trip> searchTrips(@RequestParam String destination) {
-        return tripRepo.findByDestinationContainingIgnoreCase(destination);
+        // Recherche uniquement parmi les voyages publics
+        return tripRepo.findByIsPrivateFalseOrIsPrivateIsNullAndDestinationContainingIgnoreCase(destination);
     }
 
     @PostMapping

@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -36,6 +37,11 @@
                 <DatePicker fx:id="dateInput" promptText="Sélectionner une date" maxWidth="Infinity"/>
             </VBox>
 
+            <VBox spacing="5">
+                <Label text="Date de fin" styleClass="lbl"/>
+                <DatePicker fx:id="dateFinInput" promptText="Sélectionner une date" maxWidth="Infinity"/>
+            </VBox>
+
             <VBox spacing="8">
                 <Label text="Activités" styleClass="lbl"/>
                 <HBox spacing="10" alignment="CENTER_LEFT">
@@ -44,6 +50,10 @@
                 </HBox>
                 <ListView fx:id="activityListView" prefHeight="120" styleClass="list-group"/>
             </VBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <CheckBox fx:id="privateCheckBox" text="Voyage privé (non visible dans la liste publique)"/>
+            </HBox>
 
             <VBox VBox.vgrow="ALWAYS" />
 
