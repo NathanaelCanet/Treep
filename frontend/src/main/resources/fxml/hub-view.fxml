@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -12,6 +14,8 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
 
 <BorderPane prefHeight="700.0" prefWidth="1000.0" 
             xmlns="http://javafx.com/javafx/21" 
@@ -43,7 +47,9 @@
             
             <TextField fx:id="searchField" promptText="Rechercher une destination" prefWidth="250.0" onAction="#onSearch" styleClass="form-control" />
             <Button mnemonicParsing="false" onAction="#onSearch" text="Rechercher" styleClass="btn, btn-default" />
-            <Button mnemonicParsing="false" onAction="#onOpenCreate" text="+ Créer Voyage" styleClass="btn, btn-primary" />
+                <ToggleButton fx:id="allTripsBtn" text="Tous les voyages" selected="true" />
+                <ToggleButton fx:id="myTripsBtn" text="Mes voyages" />
+                <Button mnemonicParsing="false" onAction="#onOpenCreate" text="+ Créer Voyage" styleClass="btn, btn-primary" />
         </HBox>
     </top>
 
