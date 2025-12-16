@@ -2,7 +2,6 @@ package com.treep.backend.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,15 +16,15 @@ import com.treep.backend.model.Trip;
 import com.treep.backend.repository.ActivityRepository;
 import com.treep.backend.repository.TripRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/api/activities")
+@RequiredArgsConstructor
 public class ActivityController {
 
-    @Autowired
-    private ActivityRepository activityRepo;
-
-    @Autowired
-    private TripRepository tripRepo;
+    private final ActivityRepository activityRepo;
+    private final TripRepository tripRepo;
 
     // Récupérer les activités d'un voyage spécifique (pour JavaFX)
     @GetMapping("/trip/{tripId}")

@@ -14,12 +14,22 @@ import java.util.List;
 
 public class ApiClientServices {
     private static final String BASE_URL = "http://localhost:8080/api/trips";
+    
+    // Singleton instance
+    private static final ApiClientServices INSTANCE = new ApiClientServices();
+    
     private final HttpClient client;
     private final ObjectMapper mapper;
 
-    public ApiClientServices() {
+    // Constructeur privé pour empêcher l'instanciation externe
+    private ApiClientServices() {
         this.client = HttpClient.newHttpClient();
         this.mapper = new ObjectMapper();
+    }
+    
+    // Point d'accès unique à l'instance
+    public static ApiClientServices getInstance() {
+        return INSTANCE;
     }
 
     public List<Trip> getAllTrips() {

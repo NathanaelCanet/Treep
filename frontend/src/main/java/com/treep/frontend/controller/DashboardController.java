@@ -20,7 +20,7 @@ public class DashboardController {
     @FXML private TextField activityInput;
     @FXML private ListView<String> activityListView;
 
-    private final ApiClientServices api = new ApiClientServices();
+    private final ApiClientServices api = ApiClientServices.getInstance();
     private final ObservableList<String> activities = FXCollections.observableArrayList();
 
     @FXML
