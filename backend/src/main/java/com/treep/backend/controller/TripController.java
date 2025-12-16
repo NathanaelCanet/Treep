@@ -13,15 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.treep.backend.model.Trip;
 import com.treep.backend.repository.TripRepository;
+import com.treep.backend.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/trips")
 @RequiredArgsConstructor
-public class TripController {
 
+public class TripController {
     private final TripRepository tripRepo;
+    private final UserRepository userRepo;
 
     @GetMapping
     public List<Trip> getAllTrips() {
@@ -41,7 +43,19 @@ public class TripController {
                 activity.setTrip(trip);
             }
         }
+        // Lier le user si présent dans le JSON
+        if (trip.getUser() != null && trip.getUser().getId() != null) {
+            userRepo.findById(trip.getUser().getId()).ifPresentOrElse(
+                trip::setUser,
+                () -> { throw new RuntimeException("Utilisateur avec id=" + trip.getUser().getId() + " introuvable"); }
+            );
+        }
         return tripRepo.save(trip);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<Trip> getTripsByUser(@PathVariable Long userId) {
+        return tripRepo.findByUser_Id(userId);
     }
 
     @DeleteMapping("/{id}")
