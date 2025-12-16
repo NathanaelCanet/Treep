@@ -60,27 +60,21 @@ public class UserController {
         return user;
     }
 
-    // Mettre à jour un utilisateur existant
-    // PUT /api/users/{id} avec un body JSON contenant les nouvelles données
     @PutMapping("/{id}")
     public User updateUser(@PathVariable Long id, @RequestBody User userDetails) {
         // Cherche l'utilisateur par son ID, lève une erreur 404 s'il n'existe pas
         User user = userRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User introuvable"));
         
-        // Met à jour le login
         user.setLogin(userDetails.getLogin());
         
         // Met à jour le mot de passe seulement s'il est fourni (pas null et pas vide)
-        // Permet de modifier un user sans changer son mot de passe
         if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
             user.setPassword(userDetails.getPassword());
         }
         
-        // Met à jour le rôle (USER ou ADMIN)
         user.setRole(userDetails.getRole());
         
-        // Sauvegarde en base et retourne l'utilisateur mis à jour
         return userRepo.save(user);
     }
 

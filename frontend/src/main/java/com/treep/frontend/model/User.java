@@ -5,20 +5,26 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data // Getters, Setters, toString, equals, hashCode
-@NoArgsConstructor // Constructeur sans argument
 @AllArgsConstructor // Constructeur avec tous les arguments
 public class User {
 
+    @JsonProperty("id")
     private Long id;
+
+    @JsonProperty("login")
     private String login;
+
+    @JsonProperty("password")
     private String password;
+
+    @JsonProperty("role")
     private Role role;
+
+    @JsonProperty("trips")
     private List<Trip> trips = new ArrayList<>();
 
-    // Constructeur avec id, login, password, role (sans trips)
     public User(Long id, String login, String password, Role role) {
         this.id = id;
         this.login = login;
