@@ -12,4 +12,7 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
     
     // Recherche par destination
     List<Trip> findByDestinationContainingIgnoreCase(String destination);
+
+    // Recherche par propriétaire (user id)
+    List<Trip> findByUser_Id(Long userId);
 }
