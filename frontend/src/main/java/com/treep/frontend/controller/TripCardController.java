@@ -24,7 +24,11 @@ public class TripCardController {
     @FXML
     private Label favoriteButton;
     @FXML
+    private Label privateBadge;
+    @FXML
     private Button deleteButton;
+    @FXML
+    private Label authorLabel;
     @FXML
     private VBox activitiesContainer;
 
@@ -44,6 +48,15 @@ public class TripCardController {
         datesLabel.setText(trip.getDateDebut() + " ➔ " + trip.getDateFin());
         budgetButton.setText(trip.getBudgetTotal() + " €");
 
+        // Badge privé
+        if (trip.getIsPrivate() != null && trip.getIsPrivate()) {
+            privateBadge.setVisible(true);
+            privateBadge.setManaged(true);
+        } else {
+            privateBadge.setVisible(false);
+            privateBadge.setManaged(false);
+        }
+
         // Activités
         activitiesContainer.getChildren().clear();
 
@@ -61,6 +74,13 @@ public class TripCardController {
 
         // Configurer le bouton favori
         updateFavoriteButton();
+
+        // Auteur du voyage
+        if (trip.getUser() != null && trip.getUser().getLogin() != null) {
+            authorLabel.setText("Par " + trip.getUser().getLogin());
+        } else {
+            authorLabel.setText("");
+        }
     }
 
     /**
