@@ -21,7 +21,11 @@
         <left>
             <HBox spacing="8" alignment="TOP_LEFT">
                 <VBox spacing="4">
-                    <Label fx:id="destinationLabel" styleClass="h4" />
+                    <HBox spacing="6" alignment="CENTER_LEFT">
+                        <Label fx:id="destinationLabel" styleClass="h4" />
+                        <Label fx:id="privateBadge" text="🔒 Privé" styleClass="lbl, lbl-warning" 
+                               style="-fx-font-size: 11px;" visible="false" managed="false" />
+                    </HBox>
                     <Label fx:id="datesLabel" styleClass="lbl, lbl-default" />
                 </VBox>
                 <Label fx:id="favoriteButton" text="☆" onMouseClicked="#onToggleFavorite" 
@@ -43,5 +47,10 @@
             <!-- Les activités seront ajoutées ici dynamiquement -->
         </VBox>
     </VBox>
+
+    <!-- Auteur du voyage -->
+    <HBox alignment="CENTER_RIGHT">
+        <Label fx:id="authorLabel" text="" style="-fx-text-fill: #999; -fx-font-size: 11px; -fx-font-style: italic;" />
+    </HBox>
 
 </VBox>
