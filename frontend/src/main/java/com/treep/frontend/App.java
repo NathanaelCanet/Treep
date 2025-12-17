@@ -17,6 +17,9 @@ public class App extends Application {
         // Ajouter BootstrapFX
         scene.getStylesheets().add(org.kordamp.bootstrapfx.BootstrapFX.bootstrapFXStylesheet());
 
+        // Ajouter nos styles personnalisés
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/styles.css")).toExternalForm());
+
         stage.setTitle("Treep - Connexion");
         stage.setScene(scene);
         stage.show();

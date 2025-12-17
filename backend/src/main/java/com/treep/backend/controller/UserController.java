@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.treep.backend.model.Trip;
 import com.treep.backend.model.User;
+import com.treep.backend.repository.TripRepository;
 import com.treep.backend.repository.UserRepository;
 import com.treep.backend.service.PasswordService;
 
@@ -26,6 +28,7 @@ public class UserController {
 
     private final UserRepository userRepo;
     private final PasswordService passwordService;
+    private final TripRepository tripRepo;
 
     @GetMapping
     public List<User> getAllUsers() {
@@ -88,5 +91,46 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         userRepo.deleteById(id);
+    }
+
+    // ========== FAVORITES ==========
+
+    @PostMapping("/{userId}/favorites/{tripId}")
+    public User addFavorite(@PathVariable Long userId, @PathVariable Long tripId) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User introuvable"));
+
+        Trip trip = tripRepo.findById(tripId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Voyage introuvable"));
+
+        // Vérifier que le voyage n'est pas déjà dans les favoris
+        if (!user.getFavoriteTrips().contains(trip)) {
+            user.addFavoriteTrip(trip);
+            userRepo.save(user);
+        }
+
+        return user;
+    }
+
+    @DeleteMapping("/{userId}/favorites/{tripId}")
+    public User removeFavorite(@PathVariable Long userId, @PathVariable Long tripId) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User introuvable"));
+
+        Trip trip = tripRepo.findById(tripId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Voyage introuvable"));
+
+        user.removeFavoriteTrip(trip);
+        userRepo.save(user);
+
+        return user;
+    }
+
+    @GetMapping("/{userId}/favorites")
+    public List<Trip> getFavorites(@PathVariable Long userId) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User introuvable"));
+
+        return user.getFavoriteTrips();
     }
 }

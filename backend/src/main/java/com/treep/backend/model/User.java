@@ -14,6 +14,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -39,7 +42,13 @@ public class User {
     @JsonIgnore
     private List<Trip> trips = new ArrayList<>();
 
-    public User() {}
+    @ManyToMany
+    @JoinTable(name = "user_favorite_trips", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "trip_id"))
+    @JsonIgnore
+    private List<Trip> favoriteTrips = new ArrayList<>();
+
+    public User() {
+    }
 
     public User(String login, String password, Role role) {
         this.login = login;
@@ -95,5 +104,21 @@ public class User {
 
     public void setTrips(List<Trip> trips) {
         this.trips = trips;
+    }
+
+    public List<Trip> getFavoriteTrips() {
+        return favoriteTrips;
+    }
+
+    public void setFavoriteTrips(List<Trip> favoriteTrips) {
+        this.favoriteTrips = favoriteTrips;
+    }
+
+    public void addFavoriteTrip(Trip trip) {
+        favoriteTrips.add(trip);
+    }
+
+    public void removeFavoriteTrip(Trip trip) {
+        favoriteTrips.remove(trip);
     }
 }

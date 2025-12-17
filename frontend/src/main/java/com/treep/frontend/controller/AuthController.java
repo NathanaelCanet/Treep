@@ -17,15 +17,22 @@ import java.io.IOException;
 public class AuthController {
 
     // Champs Connexion
-    @FXML private TextField loginUsername;
-    @FXML private PasswordField loginPassword;
-    @FXML private Label loginError;
+    @FXML
+    private TextField loginUsername;
+    @FXML
+    private PasswordField loginPassword;
+    @FXML
+    private Label loginError;
 
     // Champs Inscription
-    @FXML private TextField registerUsername;
-    @FXML private PasswordField registerPassword;
-    @FXML private PasswordField registerPasswordConfirm;
-    @FXML private Label registerError;
+    @FXML
+    private TextField registerUsername;
+    @FXML
+    private PasswordField registerPassword;
+    @FXML
+    private PasswordField registerPasswordConfirm;
+    @FXML
+    private Label registerError;
 
     private final AuthService authService = new AuthService();
 
@@ -89,11 +96,12 @@ public class AuthController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/hub-view.fxml"));
             Parent root = loader.load();
-            
+
             Stage stage = (Stage) loginUsername.getScene().getWindow();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
-            
+            scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
+
             stage.setScene(scene);
             stage.setTitle("Treep - Mes Voyages");
             stage.centerOnScreen();

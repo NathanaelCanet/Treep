@@ -19,10 +19,14 @@
     <!-- Header avec destination, dates et boutons -->
     <BorderPane>
         <left>
-            <VBox spacing="4">
-                <Label fx:id="destinationLabel" styleClass="h4" />
-                <Label fx:id="datesLabel" styleClass="lbl, lbl-default" />
-            </VBox>
+            <HBox spacing="8" alignment="TOP_LEFT">
+                <VBox spacing="4">
+                    <Label fx:id="destinationLabel" styleClass="h4" />
+                    <Label fx:id="datesLabel" styleClass="lbl, lbl-default" />
+                </VBox>
+                <Label fx:id="favoriteButton" text="☆" onMouseClicked="#onToggleFavorite" 
+                       styleClass="favorite-star" style="-fx-cursor: hand; -fx-font-size: 20px;" />
+            </HBox>
         </left>
         <right>
             <HBox spacing="10" alignment="CENTER_RIGHT">

@@ -10,7 +10,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-@Data //Setters et Getters
+@Data // Setters et Getters
 @NoArgsConstructor // Constructeur sans argument
 @AllArgsConstructor // Constructeur avec argument
 public class Trip {
@@ -38,4 +38,7 @@ public class Trip {
 
     @JsonProperty("isPrivate")
     private Boolean isPrivate = false;
+
+    // Champ local (non envoyé au backend) pour savoir si c'est un favori
+    private boolean isFavorite = false;
 }

@@ -1,0 +1,13 @@
+/* Styles pour l'étoile de favoris */
+.favorite-star {
+    -fx-font-size: 20px;
+    -fx-cursor: hand;
+}
+
+.favorite-star-empty {
+    -fx-text-fill: #666666;
+}
+
+.favorite-star-filled {
+    -fx-text-fill: #FFD700; /* Jaune doré */
+}
