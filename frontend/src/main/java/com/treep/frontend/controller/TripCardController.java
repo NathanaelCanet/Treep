@@ -2,6 +2,7 @@ package com.treep.frontend.controller;
 
 import com.treep.frontend.model.Activity;
 import com.treep.frontend.model.Trip;
+import com.treep.frontend.model.User;
 import com.treep.frontend.service.ApiClientServices;
 import com.treep.frontend.service.AuthService;
 import javafx.fxml.FXML;
@@ -56,6 +57,14 @@ public class TripCardController {
             privateBadge.setVisible(false);
             privateBadge.setManaged(false);
         }
+        // Afficher le bouton supprimer uniquement si l'utilisateur est le propriétaire
+        User currentUser = AuthService.getCurrentUser();
+        boolean isOwner = currentUser != null 
+                && trip.getUser() != null 
+                && currentUser.getId() != null 
+                && currentUser.getId().equals(trip.getUser().getId());
+        deleteButton.setVisible(isOwner);
+        deleteButton.setManaged(isOwner); // Ne pas occuper d'espace si invisible
 
         // Activités
         activitiesContainer.getChildren().clear();
